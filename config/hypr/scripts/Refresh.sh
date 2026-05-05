@@ -35,7 +35,7 @@ pkill -f 'waybar-cava\..*\.conf' 2>/dev/null || true
 #ags -q && ags &
 
 # quit quickshell & relaunch quickshell
-#pkill qs && qs &
+pkill qs && qs &
 
 # some process to kill (exclude waybar to avoid restart loops)
 for pid in $(pidof rofi swaync ags swaybg); do

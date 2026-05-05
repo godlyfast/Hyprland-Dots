@@ -34,7 +34,7 @@ done
 #ags -q && ags &
 
 # quit quickshell & relaunch quickshell
-#pkill qs && qs &
+pkill qs && qs &
 
 
 # reload swaync
