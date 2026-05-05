@@ -42,5 +42,6 @@ htmlcov/
 *.swp
 *.swo
 
-# Copy-Logs
+# Install logs and backups
 Copy-Logs/
+*.backup
