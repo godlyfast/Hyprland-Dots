@@ -53,6 +53,7 @@ v2.3.20 baseline to find local edits the upgrade dropped. Three more commits res
 | "Sync post-May live drift" | SUPER+F floating / SUPER+SPACE layout-switch / waybar-layout-menu / wallpaper-change keybinds; 2px borders, 2/4 gaps |
 | "Restore customizations lost in v2.3.20 → v2.3.25 migration" | `TouchPad.sh` `device[name]` v3 syntax; `Distro_update.sh` error-hold on failed paru/yay; `RefreshNoWaybar.sh` quickshell restart disabled; `WallpaperAutoChange` 5-min interval; Fn+F4 RGB via `asusctl aura effect --next-mode`; kitty numpad-Enter map; waybar keyboard-layout module (`cat ~/.cache/kb_layout` + `SwitchKeyboardLayout.sh` on-click); waybar custom app icons (Roon, Viber, Claude Code, Teams, Tidal, Steam, Chrome); user-rewritten `Tak0-Autodispatch.sh` → `UserScripts/` |
 | "Fix script exec bits, keybind collisions, sidebar startup race" | `chmod +x` on all custom scripts (stored non-executable since May — every custom-script keybind failed silently with permission denied); keybind collision fixes; `SidebarToggle.sh` waits for quickshell IPC |
+| "Kitty: pin black background, JetBrainsMono NF" | Upstream v2.3.25 switched kitty to the wallust theme (`01-Wallust.conf`), which made the background follow the wallpaper (blue on 2026-08-08). Fix: `background #000000` at the END of `kitty.conf` (after the theme include — kitty is last-value-wins), so ANSI colors/cursor/tabs still re-theme per wallpaper while the background stays black. Font: FantasqueSansM → `JetBrainsMono Nerd Font Mono` |
 
 ### Keybind decisions (machine-local)
 
