@@ -7,7 +7,8 @@ commits on top of the actively maintained `LinuxBeginnings/Hyprland-Dots` upstre
 (successor of the archived `JaKooLit/Hyprland-Dots`).
 
 **Original migration (JaKooLit → LinuxBeginnings):** 2026-05-05, base v2.3.23
-**Last upgrade:** 2026-08-08, rebased onto `upstream/main` post-v2.3.25 (`bca86bbe`)
+**Last upgrade:** 2026-08-08, rebased onto `upstream/main` post-v2.3.25 (`bca86bbe`),
+deployed to `~/.config` the same day (previous live config was JaKooLit v2.3.20)
 **Tracked branch:** `upstream/main` (stable). Do NOT base on `upstream/development` —
 it is mid-flight in a Lua config conversion and frequently broken.
 
@@ -38,8 +39,31 @@ deploy from `~/Hyprland-Dots` (this fork) with `copy.sh` instead.
 | Keep user settings compatible with Hyprland 0.55 | `UserConfigs/UserSettings.conf` | Removes `pseudotile`/`vfr` (dropped in Hyprland 0.55+; still correct on 0.56) |
 
 **Absorbed by upstream (no longer fork commits):** nvim as default editor,
-Bibata-Modern-Ice cursor theme, quickshell restart in `Refresh.sh`/`RefreshNoWaybar.sh`,
-`blueman-applet`/`qs`/`KeybindsLayoutInit.sh` startup entries.
+Bibata-Modern-Ice cursor theme, `blueman-applet`/`qs`/`KeybindsLayoutInit.sh` startup
+entries, `PortalHyprland.sh` autostart (Chrome-GTK4 crash fix), togglesplit `layoutmsg`
+fix, `KooLsDotsUpdate.sh` curl hardening, kitty `-e` in `Distro_update.sh`.
+
+### Post-deploy audit commits (2026-08-08)
+
+After deploying, every backed-up config tree was diffed against the exact JaKooLit
+v2.3.20 baseline to find local edits the upgrade dropped. Three more commits resulted:
+
+| Commit | What it restores |
+|--------|------------------|
+| "Sync post-May live drift" | SUPER+F floating / SUPER+SPACE layout-switch / waybar-layout-menu / wallpaper-change keybinds; 2px borders, 2/4 gaps |
+| "Restore customizations lost in v2.3.20 → v2.3.25 migration" | `TouchPad.sh` `device[name]` v3 syntax; `Distro_update.sh` error-hold on failed paru/yay; `RefreshNoWaybar.sh` quickshell restart disabled; `WallpaperAutoChange` 5-min interval; Fn+F4 RGB via `asusctl aura effect --next-mode`; kitty numpad-Enter map; waybar keyboard-layout module (`cat ~/.cache/kb_layout` + `SwitchKeyboardLayout.sh` on-click); waybar custom app icons (Roon, Viber, Claude Code, Teams, Tidal, Steam, Chrome); user-rewritten `Tak0-Autodispatch.sh` → `UserScripts/` |
+| "Fix script exec bits, keybind collisions, sidebar startup race" | `chmod +x` on all custom scripts (stored non-executable since May — every custom-script keybind failed silently with permission denied); keybind collision fixes; `SidebarToggle.sh` waits for quickshell IPC |
+
+### Keybind decisions (machine-local)
+
+| Bind | Action | Note |
+|------|--------|------|
+| SUPER+SPACE | `SwitchKeyboardLayout.sh` (us ⇄ ua) | stock float-toggle unbound |
+| SUPER+F | toggle floating | stock "maximize" unbound |
+| SUPER+CTRL+F | maximize window (`fullscreen, 1`) | relocated stock bind |
+| SUPER+SHIFT+F | true fullscreen | stock |
+| SUPER+SHIFT+B | Brave | stock RainbowBorders-low-cpu unbound |
+| SUPER+CTRL+SHIFT+B | Booru sidebar (`SidebarToggle.sh`) | quickshell `booru-sidebar` config |
 
 ---
 
@@ -60,16 +84,27 @@ local intent; a cherry-pick that comes up empty means upstream absorbed it — s
 
 ### Deploying to ~/.config
 
-Run `./copy.sh` (answer **NO** to Express mode). Afterwards re-verify the
-machine-local invariants that copy.sh is known to clobber (see workstation skill):
+Run `./copy.sh --upgrade` (answer **NO** to Express mode). copy.sh auto-restores the
+old `UserConfigs/` backup over the freshly-copied ones — afterwards re-sync this repo's
+`UserConfigs/` and custom scripts to `~/.config/hypr/`, then re-verify the machine-local
+invariants copy.sh is known to clobber (see workstation skill):
 
-1. `hypridle.conf` `lock_cmd = pidof hyprlock || hyprlock` (exactly — nothing else)
+1. `hypridle.conf` `lock_cmd = pidof hyprlock || hyprlock` (exactly — nothing else;
+   upstream ships this since v2.3.25, but verify)
 2. `~/.config/systemd/user/swaync.service` must NOT exist (no mask symlink)
 3. NVIDIA env vars in `configs/ENVariables.conf` stay **commented**
-   (`detect_nvidia_adjust()` re-uncomments them)
+   (`detect_nvidia_adjust()` re-uncomments them AND edits this repo's working tree —
+   `git checkout -- config/` afterwards); `no_hardware_cursors = 1` (hybrid path sets 0)
 4. Touchpad device block present in `UserConfigs/Laptops.conf`
-5. Waybar `ModulesWorkspaces` window-rewrite customizations (waybar config is not
-   in git; icons for Chrome, Thunderbird, Roon, Viber, Claude Code, Teams, Tidal, Steam)
+5. **Exec bits**: `find ~/.config/hypr/{scripts,UserScripts} -name '*.sh' ! -perm -u+x`
+   must return nothing (non-executable scripts fail keybinds silently)
+6. Waybar selection symlinks (live-only, reset by copy.sh/style scripts):
+   `config` → `[TOP & BOT] SummitSplit v3`, `style.css` → `[Dark] Wallust Obsidian Edge.css`
+7. `monitors.conf`: explicit `monitor=eDP-1,2560x1600@240.0,0x0,1.6` line present
+   (deploy may replace the nwg-displays file with the stock template)
+
+Waybar `ModulesWorkspaces` icons and the `ModulesCustom` keyboard-layout module are
+committed in this repo since 2026-08-08 and deploy with copy.sh.
 
 ---
 
