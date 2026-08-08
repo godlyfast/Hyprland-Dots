@@ -34,7 +34,8 @@ done
 ags -q && ags &
 
 # quit quickshell & relaunch quickshell
-pkill qs && qs &
+# quickshell restart disabled - overview uses hardcoded colors, not wallust
+#pkill qs && qs &
 
 
 # reload swaync

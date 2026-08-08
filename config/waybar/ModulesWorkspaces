@@ -182,6 +182,13 @@
 	"format-window-separator": " ",
 	"window-rewrite-default": " <span foreground='#ff0000'>✘</span> ",
 	"window-rewrite": {		
+		"class<roon\\.exe|Roon>": "󰎆 ",
+		"class<viber|com.viber.Viber>": "󰍩 ",
+		"title<.*Claude Code.*>": "󰚩 ",
+		"class<teams-for-linux>": "󰊻 ",
+		"title<.*TIDAL.*>": "🌊 ",
+		"class<tidal-hifi>": "🌊 ",
+		"class<steam_app_.*>": "󰊗 ",
 		"title<.*amazon.*>": " ",
 		"title<.*reddit.*>": " ",
 
@@ -189,7 +196,7 @@
 		"class<zen>": "󰰷 ",
 		"class<waterfox|waterfox-bin>": " ",
 		"class<microsoft-edge>": " ",
-		"class<Chromium|Thorium|[Cc]hrome>": " ",
+		"class<Chromium|Thorium|[Cc]hrome|google-chrome>": " ",
 		"class<brave-browser>": "🦁 ",
 		"class<tor browser>": " ",
 		"class<firefox-developer-edition>": "🦊 ",

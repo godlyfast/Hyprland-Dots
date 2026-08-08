@@ -110,10 +110,10 @@
 },
 
 "custom/keyboard": {
-	"exec": "$HOME/.config/hypr/scripts/KeyboardLayout.sh status",
+	"exec": "cat $HOME/.cache/kb_layout",
 	"interval": 1,
 	"format": " {}",
-	"on-click": "$HOME/.config/hypr/scripts/KeyboardLayout.sh switch",
+	"on-click": "$HOME/.config/hypr/scripts/SwitchKeyboardLayout.sh",
 },
 "custom/hypr_layout": {
 	"exec": "$HOME/.config/hypr/scripts/HyprLayoutModule.sh status",

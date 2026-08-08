@@ -20,10 +20,10 @@ fi
 if command -v paru &> /dev/null || command -v yay &> /dev/null; then
   # Arch-based
   if command -v paru &> /dev/null; then
-    kitty -T update -e paru -Syu
+    kitty -T update -e bash -c 'paru -Syu || { echo; read -rp "Update failed — press Enter to close..."; }'
     notify-send -i "$iDIR/ja.png" -u low 'Arch-based system' 'has been updated.'
   else
-    kitty -T update -e yay -Syu
+    kitty -T update -e bash -c 'yay -Syu || { echo; read -rp "Update failed — press Enter to close..."; }'
     notify-send -i "$iDIR/ja.png" -u low 'Arch-based system' 'has been updated.'
   fi
 elif command -v dnf &> /dev/null; then
