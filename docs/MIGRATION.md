@@ -2,191 +2,91 @@
 
 ## Overview
 
-This repository (`godlyfast/Hyprland-Dots`) is a fork of the Hyprland desktop environment dotfiles, migrated from the archived `JaKooLit/Hyprland-Dots` to the actively maintained `LinuxBeginnings/Hyprland-Dots` upstream. All local machine customizations have been preserved as atomic commits on top of the new upstream.
+This repository (`godlyfast/Hyprland-Dots`) carries local machine customizations as atomic
+commits on top of the actively maintained `LinuxBeginnings/Hyprland-Dots` upstream
+(successor of the archived `JaKooLit/Hyprland-Dots`).
 
-**Date of migration:** 2026-05-05  
-**Base upstream version:** v2.3.23 (`3e00d002`)  
-**Original upstream:** `JaKooLit/Hyprland-Dots` (archived)  
-**New upstream:** `LinuxBeginnings/Hyprland-Dots` (active)
+**Original migration (JaKooLit → LinuxBeginnings):** 2026-05-05, base v2.3.23
+**Last upgrade:** 2026-08-08, rebased onto `upstream/main` post-v2.3.25 (`bca86bbe`)
+**Tracked branch:** `upstream/main` (stable). Do NOT base on `upstream/development` —
+it is mid-flight in a Lua config conversion and frequently broken.
 
 ---
 
 ## Architecture
 
-The Hyprland ecosystem consists of two separate repositories:
+| Repository | Purpose | Remote setup |
+|------------|---------|--------------|
+| `Hyprland-Dots` | Dotfiles/configs (`config/`, `copy.sh`) | fork `godlyfast/Hyprland-Dots` (origin) + `LinuxBeginnings/Hyprland-Dots` (upstream) |
+| `Arch-Hyprland` | Installer scripts | **no fork** — tracks `LinuxBeginnings/Arch-Hyprland` directly (fork dropped 2026-08-08: it had zero unique commits and the installer clones the Dots repo itself) |
 
-| Repository | Purpose | Your Fork |
-|------------|---------|-----------|
-| `Hyprland-Dots` | Actual dotfiles/configs (`config/`, `copy.sh`) | `github.com/godlyfast/Hyprland-Dots` |
-| `Arch-Hyprland` | Installer scripts (`install.sh`, `install-scripts/`) | `github.com/godlyfast/Arch-Hyprland` |
-
-**Relationship:** The installer (`Arch-Hyprland`) does not contain configs. During installation, it clones `Hyprland-Dots` and runs `copy.sh` to deploy configs to `~/.config/`.
-
----
-
-## Migration Summary
-
-### What Changed
-
-- **Upstream switched:** `origin` remote now points to `LinuxBeginnings/Hyprland-Dots`
-- **116 new commits:** Migrated from archived JaKooLit `v2.3.20` to active LinuxBeginnings `v2.3.23`
-- **Archiving notice removed:** The "Update README with project archiving notice" commit from JaKooLit is no longer in history
-- **Local customizations preserved:** All 6 modified config/script files retained as atomic commits
-- **Installer patched:** `godlyfast/Arch-Hyprland` is wired to clone `godlyfast/Hyprland-Dots` instead of upstream
-
-### Customization Commits (on top of v2.3.23)
-
-| Commit | File(s) | Description |
-|--------|---------|-------------|
-| `d718c4c` | `AGENTS.md` | Project context documentation |
-| `88654cf` | `01-UserDefaults.conf`, `ENVariables.conf` | Editor = nvim, Bibata cursor theme, NVIDIA GPU env vars |
-| `a7b558b` | `Startup_Apps.conf`, `SystemSettings.conf` | Startup apps (ROG, blueman, qs), hardware cursors disabled |
-| `f6ee20a` | `Refresh.sh`, `RefreshNoWaybar.sh` | Quickshell restart enabled on refresh |
-| `18fb4d5` | `.gitignore` | Ignore `Copy-Logs/` and `*.backup` files |
-
-**Customizations in detail:**
-
-- **Editor:** Changed default from `vim` to `nvim` (`$EDITOR = nvim`)
-- **Cursor:** Enabled `Bibata-Modern-Ice` cursor theme (24px)
-- **NVIDIA:** Set `LIBVA_DRIVER_NAME=nvidia`, `__GLX_VENDOR_LIBRARY_NAME=nvidia`, `NVD_BACKEND=direct`, `GSK_RENDERER=ngl`
-- **Startup apps:** Added `rog-control-center`, `blueman-applet`, `qs` (quickshell), `KeybindsLayoutInit.sh`
-- **Hardware cursors:** Disabled (`no_hardware_cursors = 1`) for NVIDIA compatibility
-- **Quickshell:** Both refresh scripts restart quickshell on execution
+The installer clones `LinuxBeginnings/Hyprland-Dots` during install; on this machine,
+deploy from `~/Hyprland-Dots` (this fork) with `copy.sh` instead.
 
 ---
 
-## Remote Configuration
+## Customization Commits (on top of upstream/main)
 
-Your local `~/Hyprland-Dots` should have these remotes:
+| Commit subject | File(s) | Description |
+|----------------|---------|-------------|
+| Add AGENTS.md for project context | `AGENTS.md` | AI-assistant workspace map |
+| Comment out NVIDIA env vars; set editor to nvim | `configs/ENVariables.conf` | **Inverted vs 2026-05**: upstream now ships NVIDIA env vars uncommented; this machine needs them commented because `start-hyprland.sh` sets GPU vars dynamically per `supergfxctl` mode |
+| Configure Hyprland startup apps and disable hardware cursors | `configs/Startup_Apps.conf`, `configs/SystemSettings.conf` | Adds `rog-control-center`; `no_hardware_cursors = 1` (NVIDIA) |
+| Update .gitignore for logs and backup files | `.gitignore` | Ignore `Copy-Logs/`, `*.backup` |
+| Add migration documentation | `docs/MIGRATION.md` | This file |
+| Sync local custom bindings, scripts and configs | `UserConfigs/*`, `scripts/*`, `UserScripts/RainbowBorders.sh` | Personal keybinds (Thunderbird, browsers, StatusCheck, SchedulerSwitch, HyprWave), touchpad device block, custom scripts (MemoryMonitor, ProfileSwitch, SidebarToggle, SwitchKeyboardLayout, WallpaperChange, StatusCheck) |
+| Keep user settings compatible with Hyprland 0.55 | `UserConfigs/UserSettings.conf` | Removes `pseudotile`/`vfr` (dropped in Hyprland 0.55+; still correct on 0.56) |
 
-```bash
-$ git remote -v
-origin    https://github.com/godlyfast/Hyprland-Dots.git (fetch)
-origin    https://github.com/godlyfast/Hyprland-Dots.git (push)
-upstream  https://github.com/LinuxBeginnings/Hyprland-Dots.git (fetch)
-upstream  https://github.com/LinuxBeginnings/Hyprland-Dots.git (push)
-```
+**Absorbed by upstream (no longer fork commits):** nvim as default editor,
+Bibata-Modern-Ice cursor theme, quickshell restart in `Refresh.sh`/`RefreshNoWaybar.sh`,
+`blueman-applet`/`qs`/`KeybindsLayoutInit.sh` startup entries.
 
 ---
 
 ## Daily Workflow
 
-### Pull Latest Upstream Changes
+### Pull latest upstream (stable)
 
 ```bash
 cd ~/Hyprland-Dots
 git fetch upstream
-git rebase upstream/main
-git push origin main
+git rebase upstream/main        # replays the customization commits
+git push --force-with-lease origin main
 ```
 
-This replays your 5 customization commits on top of the latest upstream.
+Expected conflict areas: `configs/ENVariables.conf` (NVIDIA block),
+`configs/Startup_Apps.conf`, `UserConfigs/*`. Resolve keeping upstream structure +
+local intent; a cherry-pick that comes up empty means upstream absorbed it — skip it.
 
-### Push Customizations to Your Fork
+### Deploying to ~/.config
 
-```bash
-git push origin main
-```
+Run `./copy.sh` (answer **NO** to Express mode). Afterwards re-verify the
+machine-local invariants that copy.sh is known to clobber (see workstation skill):
 
----
-
-## Fresh Machine Setup
-
-### Option A: Full Automated Install (Arch Linux)
-
-```bash
-git clone https://github.com/godlyfast/Arch-Hyprland.git
-cd Arch-Hyprland
-./install.sh
-```
-
-The installer will:
-1. Install all required packages
-2. Clone `godlyfast/Hyprland-Dots` (your customized dotfiles)
-3. Run `copy.sh` to deploy to `~/.config/`
-
-### Option B: Dotfiles Only (Any Distro)
-
-```bash
-git clone https://github.com/godlyfast/Hyprland-Dots.git
-cd Hyprland-Dots
-./copy.sh
-```
-
-This only deploys configs. You must install Hyprland and dependencies separately.
+1. `hypridle.conf` `lock_cmd = pidof hyprlock || hyprlock` (exactly — nothing else)
+2. `~/.config/systemd/user/swaync.service` must NOT exist (no mask symlink)
+3. NVIDIA env vars in `configs/ENVariables.conf` stay **commented**
+   (`detect_nvidia_adjust()` re-uncomments them)
+4. Touchpad device block present in `UserConfigs/Laptops.conf`
+5. Waybar `ModulesWorkspaces` window-rewrite customizations (waybar config is not
+   in git; icons for Chrome, Thunderbird, Roon, Viber, Claude Code, Teams, Tidal, Steam)
 
 ---
 
 ## Rollback
 
-If anything goes wrong, the pre-migration state is preserved:
+Backup branches (local):
 
-```bash
-git checkout main
-git reset --hard backup-pre-migration
-```
+- `backup-pre-upgrade-2026-08-08` — pre-upgrade `development` tip (old JaKooLit-era base + customizations)
+- `backup-main-2026-08-08` — pre-upgrade `main`
+- `backup-pre-migration` — original pre-May-2026 JaKooLit state
 
-The `backup-pre-migration` branch contains the exact state before the migration (JaKooLit upstream + uncommitted local modifications).
-
----
-
-## File Inventory
-
-### Modified Files (6)
-
-| File | Type | Customization |
-|------|------|---------------|
-| `config/hypr/UserConfigs/01-UserDefaults.conf` | Config | `$EDITOR = nvim` |
-| `config/hypr/configs/ENVariables.conf` | Config | Bibata cursor + NVIDIA env vars |
-| `config/hypr/configs/Startup_Apps.conf` | Config | Added 4 `exec-once` startup commands |
-| `config/hypr/configs/SystemSettings.conf` | Config | `no_hardware_cursors = 1` |
-| `config/hypr/scripts/Refresh.sh` | Script | Enabled `pkill qs && qs &` |
-| `config/hypr/scripts/RefreshNoWaybar.sh` | Script | Enabled `pkill qs && qs &` |
-
-### New Files (1)
-
-| File | Description |
-|------|-------------|
-| `AGENTS.md` | Project context and workspace map for AI assistants |
-
-### Ignored Files
-
-```gitignore
-Copy-Logs/
-*.backup
-```
+`copy.sh` also snapshots the live config to `~/.config/hypr-backup-*` before deploying.
 
 ---
 
-## Troubleshooting
+## Links
 
-### Conflicts During `git rebase upstream/main`
-
-If upstream modifies the same lines as your customizations:
-
-1. Resolve the conflict in the affected file(s)
-2. `git add <file>`
-3. `git rebase --continue`
-
-Most likely conflict area: `config/hypr/scripts/Refresh.sh` (if upstream changes process kill logic).
-
-### Recovering Pre-Migration State
-
-```bash
-git branch -D main
-git checkout -b main backup-pre-migration
-```
-
----
-
-## Upstream Links
-
-- **Dotfiles:** https://github.com/LinuxBeginnings/Hyprland-Dots
-- **Installer:** https://github.com/LinuxBeginnings/Arch-Hyprland
-- **Wiki:** https://github.com/LinuxBeginnings/Hyprland-Dots/wiki
-- **Changelogs:** https://github.com/LinuxBeginnings/Hyprland-Dots/wiki/Changelogs
-
-## Your Forks
-
-- **Dotfiles:** https://github.com/godlyfast/Hyprland-Dots
-- **Installer:** https://github.com/godlyfast/Arch-Hyprland
+- **Dotfiles upstream:** https://github.com/LinuxBeginnings/Hyprland-Dots
+- **Installer upstream:** https://github.com/LinuxBeginnings/Arch-Hyprland
+- **Fork:** https://github.com/godlyfast/Hyprland-Dots
