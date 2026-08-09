@@ -188,6 +188,7 @@
 		"class<teams-for-linux>": "󰊻 ",
 		"title<.*TIDAL.*>": "🌊 ",
 		"class<tidal-hifi>": "🌊 ",
+		"class<com\\.hiresti\\.player>": "💿 ",
 		"class<steam_app_.*>": "󰊗 ",
 		"title<.*amazon.*>": " ",
 		"title<.*reddit.*>": " ",
