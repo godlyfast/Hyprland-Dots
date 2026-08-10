@@ -60,11 +60,41 @@ v2.3.20 baseline to find local edits the upgrade dropped. Three more commits res
 | Bind | Action | Note |
 |------|--------|------|
 | SUPER+SPACE | `SwitchKeyboardLayout.sh` (us ⇄ ua) | stock float-toggle unbound |
+| ALT+SHIFT | `SwitchKeyboardLayout.sh` (us ⇄ ua) | both key orders → same script, see below |
 | SUPER+F | toggle floating | stock "maximize" unbound |
 | SUPER+CTRL+F | maximize window (`fullscreen, 1`) | relocated stock bind |
 | SUPER+SHIFT+F | true fullscreen | stock |
 | SUPER+SHIFT+B | Brave | stock RainbowBorders-low-cpu unbound |
 | SUPER+CTRL+SHIFT+B | Booru sidebar (`SidebarToggle.sh`) | quickshell `booru-sidebar` config |
+
+#### Keyboard layout: global only, never per-window (2026-08-10)
+
+v2.3.25 shipped two `bindlnd` entries on the **same** Alt+Shift chord, running **different**
+scripts — `ALT_L, SHIFT_L` → `KeyboardLayout.sh switch` (global) and `SHIFT_L, ALT_L` →
+`Tak0-Per-Window-Switch.sh` (per-window). Which one fired depended on finger order, so with
+`kb_layout = us,ua` the layout behaved chaotically. Three compounding defects:
+
+1. **Same chord, two semantics.** Both binds are non-consuming (`n`), so the chord isn't
+   swallowed; whichever order you hit picked a different layout model.
+2. **A self-installing daemon.** `Tak0-Per-Window-Switch.sh` forks `--listener` in the
+   background on first use (it is in no `Startup_Apps.conf`). That listener subscribes to
+   `.socket2.sock` and calls `cmd_restore` on **every** `activewindow` event; any window absent
+   from `~/.cache/kb_layout_per_window` falls back to `kb_layouts[0]` = `us`. Net effect: switch
+   to `ua`, click another window, get snapped back to `us`.
+3. **Three scripts, three state files.** `SwitchKeyboardLayout.sh` → `~/.cache/kb_layout`;
+   `KeyboardLayout.sh` → nothing; `Tak0` → `~/.cache/kb_layout_per_window`. Waybar reads
+   `~/.cache/kb_layout`, so the indicator desynced from the real keymap.
+
+**Resolution.** All layout binds route to `SwitchKeyboardLayout.sh` — the only switcher that
+writes the waybar cache. Both key orders are bound to it, so the result is order-independent
+(exactly one toggle fires per gesture: at Shift-down the held mod is Alt, and vice versa).
+Patched in `configs/Keybinds.conf` plus the dormant Lua equivalents (`lua/keybinds.lua`,
+`configs/system_keybinds.lua`) so the bug does not return at the Hyprland Lua migration.
+
+Do **not** restore the upstream pair on rebase. If per-window switching is ever wanted, it needs
+a single unambiguous chord, an explicit `exec-once` listener, and a patch making Tak0 write
+`~/.cache/kb_layout`. Check after every upstream rebase:
+`hyprctl binds -j | jq -r '.[] | select(.dispatcher=="exec" and (.arg|test("KeyboardLayout|Tak0")))'`
 
 ---
 

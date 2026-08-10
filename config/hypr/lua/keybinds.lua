@@ -214,17 +214,22 @@ bind("SUPER SHIFT", "F", dispatch("fullscreen", ""), { description = "fullscreen
 bind("SUPER", "F", dispatch("fullscreen", "1"), { description = "maximize window" })
 bind("SUPER", "SPACE", dispatch("togglefloating", ""), { description = "Float current window" })
 bind("SUPER CTRL", "O", dispatch("setprop", "active opaque toggle"), { description = "toggle active window opacity" })
+-- Keyboard layout: GLOBAL switching only, both key orders run the SAME script.
+-- Upstream bound this chord to two different scripts (global vs per-window); the
+-- per-window one forks a socket listener that re-applies a layout on every focus
+-- change. SwitchKeyboardLayout.sh is the only one that writes ~/.cache/kb_layout,
+-- which the waybar indicator reads. See MIGRATION.md.
 bind(
   "ALT_L",
   "SHIFT_L",
-  dispatch("switch keyboard layout globally", "exec, $HOME/.config/hypr/scripts/KeyboardLayout.sh switch"),
-  { locked = true, description = "switch keyboard layout globally" }
+  dispatch("switch keyboard layout", "exec, $HOME/.config/hypr/scripts/SwitchKeyboardLayout.sh"),
+  { locked = true, description = "switch keyboard layout" }
 )
 bind(
   "SHIFT_L",
   "ALT_L",
-  dispatch("switch keyboard layout per-window", "exec, $HOME/.config/hypr/scripts/Tak0-Per-Window-Switch.sh"),
-  { locked = true, description = "switch keyboard layout per-window" }
+  dispatch("switch keyboard layout", "exec, $HOME/.config/hypr/scripts/SwitchKeyboardLayout.sh"),
+  { locked = true, description = "switch keyboard layout" }
 )
 bind(
   "SUPER CTRL",

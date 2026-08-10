@@ -262,8 +262,12 @@ bind("SUPER CTRL", "O", dispatch("setprop", "active opaque toggle"), { descripti
 bind("SUPER SHIFT", "K", exec_cmd("$HOME/.config/hypr/scripts/KeyBinds.sh"), { description = "search keybinds" })
 bind("SUPER SHIFT", "A", exec_cmd("$HOME/.config/hypr/scripts/Animations.sh"), { description = "animations menu" })
 bind("SUPER SHIFT", "R", exec_cmd("$HOME/.config/hypr/scripts/ZshChangeTheme.sh"), { description = "change oh-my-zsh theme" })
-bind("ALT_L", "SHIFT_L", exec_cmd("$HOME/.config/hypr/scripts/KeyboardLayout.sh switch"), { description = "switch keyboard layout globally", locked = true })
-bind("SHIFT_L", "ALT_L", exec_cmd("$HOME/.config/hypr/scripts/Tak0-Per-Window-Switch.sh"), { description = "switch keyboard layout per-window", locked = true })
+-- Keyboard layout: GLOBAL only, both key orders run the SAME script (see MIGRATION.md).
+-- Do NOT restore the upstream per-window bind: it forks a socket listener that
+-- re-applies a layout on every focus change. SwitchKeyboardLayout.sh is canonical --
+-- the only switcher that writes ~/.cache/kb_layout, which waybar reads.
+bind("ALT_L", "SHIFT_L", exec_cmd("$HOME/.config/hypr/scripts/SwitchKeyboardLayout.sh"), { description = "switch keyboard layout", locked = true })
+bind("SHIFT_L", "ALT_L", exec_cmd("$HOME/.config/hypr/scripts/SwitchKeyboardLayout.sh"), { description = "switch keyboard layout", locked = true })
 bind("SUPER ALT", "C", exec_cmd("$HOME/.config/hypr/UserScripts/RofiCalc.sh"), { description = "calculator" })
 bind("SUPER CTRL", "F9", dispatch("movecurrentworkspacetomonitor", "l"), { description = "move workspace to left monitor" })
 bind("SUPER CTRL", "F10", dispatch("movecurrentworkspacetomonitor", "r"), { description = "move workspace to right monitor" })
