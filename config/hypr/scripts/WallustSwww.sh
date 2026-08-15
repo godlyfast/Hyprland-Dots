@@ -190,8 +190,25 @@ wait_for_templates() {
 
 # Run wallust (silent) to regenerate templates defined in ${XDG_CONFIG_HOME:-$HOME/.config}/wallust/wallust.toml
 # -s is used in this repo to keep things quiet and avoid extra prompts
+generate_wallust_templates() {
+  if wallust "${wallust_args[@]}" run -s "$wallpaper_path" >"$wallust_log" 2>&1; then
+    return 0
+  fi
+
+  # Flat or near-monochrome wallpapers may not have enough distinct colors at
+  # the configured threshold. Preserve the normal palette when possible, and
+  # let wallust lower the threshold only for this specific failure.
+  if ! grep -Fq "Not enough colors!" "$wallust_log" ||
+    ! wallust run --help 2>&1 | grep -q -- "--dynamic-threshold"; then
+    return 1
+  fi
+
+  printf '\n[WallustSwww] Retrying with a dynamic color threshold.\n' >>"$wallust_log"
+  wallust "${wallust_args[@]}" run -s --dynamic-threshold "$wallpaper_path" >>"$wallust_log" 2>&1
+}
+
 start_ts=$(date +%s)
-if ! wallust "${wallust_args[@]}" run -s "$wallpaper_path" >"$wallust_log" 2>&1; then
+if ! generate_wallust_templates; then
   have_notify && notify-send -u critical -a WallustSwww \
     "Wallust failed" "See: $wallust_log"
   exit 1
