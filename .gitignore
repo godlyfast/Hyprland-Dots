@@ -45,3 +45,7 @@ htmlcov/
 # Install logs and backups
 Copy-Logs/
 *.backup
+
+# oh-my-claudecode runtime state (session/hud/handoff artifacts)
+.omc/
+!.omc/skills/
