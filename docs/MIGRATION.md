@@ -66,6 +66,7 @@ v2.3.20 baseline to find local edits the upgrade dropped. Three more commits res
 | SUPER+SHIFT+F | true fullscreen | stock |
 | SUPER+SHIFT+B | Brave | stock RainbowBorders-low-cpu unbound |
 | SUPER+CTRL+SHIFT+B | Booru sidebar (`SidebarToggle.sh`) | quickshell `booru-sidebar` config |
+| SUPER+ALT+D | default-browser picker (`UserScripts/RofiBrowserSelect.sh`) | rofi list of WebBrowser .desktop entries → `xdg-settings set default-web-browser`; also CLI `--get/--list/--set`; live-only symlink `~/.local/bin/default-browser` → the script (not deployed by copy.sh, recreate if missing); added 2026-08-17 |
 
 #### Keyboard layout: global only, never per-window (2026-08-10)
 
