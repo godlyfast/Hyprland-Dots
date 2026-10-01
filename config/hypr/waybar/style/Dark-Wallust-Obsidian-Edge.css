@@ -217,24 +217,27 @@ tooltip label {
 }
 
 /* --- tray readability override (global) --- */
+/* Local: upstream paints each tray item on an opaque Catppuccin-blue pill,
+   which clashes with the black bar. Sit the items on the bar instead and
+   take the icon colour from wallust like every other module. */
 #tray > *,
 #tray > .passive,
 #tray > .active,
 #tray > .needs-attention {
-  background: rgba(137, 180, 250, 0.55);
+  background: transparent;
   border-radius: 8px;
-  border: 1px solid rgba(17, 17, 27, 0.35);
+  border: none;
   margin-left: 1px;
   margin-right: 1px;
   padding-left: 2px;
   padding-right: 2px;
-  color: rgba(17, 17, 27, 0.98);
+  color: @foreground;
   -gtk-icon-effect: none;
 }
 
 #tray image {
   background: transparent;
-  color: rgba(17, 17, 27, 0.98);
+  color: @foreground;
   -gtk-icon-style: symbolic;
   -gtk-icon-effect: none;
   opacity: 1;
