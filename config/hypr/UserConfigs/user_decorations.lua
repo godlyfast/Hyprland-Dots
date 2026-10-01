@@ -19,9 +19,9 @@ local inactive_col = wallust.color10 or "rgba(5f6578ff)"
 
 hl.config({
   general = {
-    border_size = 1,
-    gaps_in = 4,
-    gaps_out = 6,
+    border_size = 2,
+    gaps_in = 2,
+    gaps_out = 4,
     col = {
       active_border = active_col,
       inactive_border = inactive_col,
@@ -40,7 +40,7 @@ hl.config({
     dim_special = 0.8,
     shadow = {
       enabled = true,
-      range = 2,
+      range = 3,
       render_power = 1,
       color = active_col,
       color_inactive = inactive_col,
@@ -51,7 +51,8 @@ hl.config({
       passes = 3,
       new_optimizations = true,
       xray = false,
-      ignore_opacity = true,
+      -- Local: false, per upstream 76f3cedd (qs-hyprview blur), which only changed the .conf
+      ignore_opacity = false,
       special = true,
       popups = true,
     },
