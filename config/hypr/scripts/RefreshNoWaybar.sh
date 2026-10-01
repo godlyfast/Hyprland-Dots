@@ -25,7 +25,8 @@ done
 ags -q && ags &
 
 # quit quickshell & relaunch quickshell
-pkill qs && qs --log-rules "$QS_TEXTINPUT_LOG_RULE" &
+# quickshell restart disabled - overview uses hardcoded colors, not wallust
+# pkill qs && qs &
 
 
 # reload swaync
