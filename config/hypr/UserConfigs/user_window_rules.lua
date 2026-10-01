@@ -139,3 +139,14 @@ local apply_window_rule = user_window_rules_helper.apply_window_rule
 --   float = true,
 --   center = true,
 -- })
+
+-- Local: Unreal Tournament 99 (native) - tearing, opaque, no effects.
+apply_window_rule({
+  name = "user-ut99-tearing",
+  match = { class = "^(ut-bin-amd64)$" },
+  immediate = true,
+  opaque = true,
+  no_blur = true,
+  no_shadow = true,
+  no_dim = true,
+})

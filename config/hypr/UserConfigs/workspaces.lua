@@ -15,3 +15,8 @@
 --     monitor = "eDP-1",
 --     layout = "dwindle",
 -- })
+
+-- Local: pin the primary workspaces to the internal panel.
+for ws = 1, 5 do
+  hl.workspace_rule({ workspace = tostring(ws), monitor = "eDP-1", layout = "dwindle" })
+end
