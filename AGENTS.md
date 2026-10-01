@@ -1,62 +1,83 @@
-# AGENTS.md
+# AGENTS.md — Hyprland-Dots/
 
-Project rules for AI agents working in this repository.
+Parent: `~/AGENTS.md`
 
-## Branch hygiene
+## OVERVIEW
 
-- `git fetch --prune` and pull the current branch before editing. Never start work on a stale branch.
-- Stash or commit local edits first, so the pull cannot fail or conflict.
-- Work on `development`. Pull requests target `development`, not `main`.
-- Say which branch and commit the work started from.
+JaKooLit Hyprland dotfiles fork for Arch Linux (CachyOS). 639 config files across Hyprland, AGS, Quickshell, Waybar, Rofi, Kitty, and more. Orchestrated by `copy.sh` for install/upgrade.
 
-## Changelog
+> **Note:** Project being archived March 2026; maintained by [Dwilliams](https://github.com/LinuxBeginnings).
 
-`CHANGELOG.md` is the source of truth for user-facing changes. The same text is pasted into Discord and GitHub tagged-release notes, so line breaks must be intentional.
+## STRUCTURE
 
-- Markdown only. No prose paragraphs, no tables.
-- Section headings keep the colon: `## Fixed:`, `## Added:`, `## Updated:`, `## Removed:`. `Fixed:` comes first.
-- One top-level bullet per change: one short line, no trailing period.
-- Details are nested bullets (`  - `). One short sentence per line. One idea per line.
-- Never wrap a sentence across two lines. Every bullet is a single line.
-- Keep every line under ~80 characters so it does not wrap when pasted.
-- Backtick code, paths, settings and keys.
-- Keep `development` current: add the entry as the change lands, under the next version heading at the top of the file.
-- Create that heading if it is missing. Never edit a section for a version that is already released.
-
-Shape:
-
-```markdown
-## Fixed:
-
-- `<thing>` no longer `<symptom>`
-  - `<cause>`
-  - `<what changed>`
-  - `<effect>`
-- `<second fix>` `<one line summary>`
-  - `<detail>`
+```
+Hyprland-Dots/
+├── config/
+│   ├── hypr/          # Hyprland core config (animations, scripts, UserConfigs)
+│   ├── ags/           # AGS widgets (config.js, modules, user_options.js)
+│   ├── quickshell/    # Quickshell overview widget
+│   ├── waybar/        # Waybar configs + styles (catppuccin, ML4W)
+│   ├── rofi/          # Rofi themes + wallust templates
+│   ├── kitty/         # Kitty terminal themes
+│   ├── btop/          # btop config + themes
+│   ├── cava/          # Audio visualizer config + shaders
+│   ├── fastfetch/     # Fastfetch configs
+│   ├── wallust/       # Color scheme templates
+│   ├── Kvantum/       # Qt theme configs
+│   └── ...            # qt5ct, qt6ct, ghostty, wezterm, wlogout, swaync
+├── scripts/           # copy.sh library modules (lib_*.sh)
+├── copy.sh            # Main install/upgrade orchestrator
+├── update-dots.sh     # Git pull + copy.sh wrapper
+├── assets/            # Wallpapers, images
+└── wallpapers/        # Default wallpaper pack
 ```
 
-## Commit messages
+## WHERE TO LOOK
 
-- Short subject line, then an optional short body. Do not narrate the root cause.
-- Reference files by basename, not full paths: `settings.lua`, `lib_detect.sh`.
-- One line per change, no paragraphs re-explaining the changelog entry.
-- Example: `v2.3.27.7: no_hardware_cursors defaults to 2, NVIDIA/hybrid/VM set 1`
+| Task | Location | Notes |
+|------|----------|-------|
+| Install / upgrade dotfiles | `copy.sh` | Interactive; express mode overwrites customizations |
+| Hyprland core settings | `config/hypr/` | `hyprland.conf`, `monitors.conf`, `workspaces.conf` |
+| Hyprland utility scripts | `config/hypr/scripts/` | 30+ shell scripts (brightness, keybinds, gamemode, etc.) |
+| AGS widgets | `config/ags/` | `config.js` entry; modules in `modules/` |
+| Quickshell overview | `config/quickshell/` | Separate from booru-sidebar repo |
+| Waybar | `config/waybar/` | Configs in `configs/`; styles in `style/` |
+| Colors / theming | `config/wallust/` | Templates generate colors for multiple apps |
 
-## Version bump
+## CONVENTIONS
 
-- Never bump the version for a normal change. The version stays at the last released one until a release is actually cut.
-- A release does all of this together:
-  - Finalise the `## vX.Y.Z` heading at the top of `CHANGELOG.md`.
-  - Set `DOTS_VERSION` in `config/hypr/lua/env.lua`.
-  - Rename the `config/hypr/vX.Y.Z` marker file. `copy.sh` and `KooLsDotsUpdate.sh` read it to detect the installed version.
-  - Merge `development` into `main` and tag `Hyprland-Dots-vX.Y.Z`.
-- The updater compares against `main`, so an unreleased version on `development` must not be advertised there.
+### Shell Scripts
+- Shebang: `#!/bin/bash`
+- Colored output via `tput setaf`
+- `copy.sh` sources modular helpers: `lib_detect.sh`, `lib_prompts.sh`, `lib_backup.sh`, `lib_copy.sh`, `lib_apps.sh`, `lib_update.sh`, `copy_menu.sh`
 
-## Wiki sync
+### Config Files
+- Hyprland: `.conf` extension
+- AGS: JavaScript (`config.js`, `user_options.js`)
+- Quickshell: QML
+- Waybar: JSON configs + CSS styles
 
-- The wiki documents released versions only.
-- Update `Changelogs.md` (English) and `Changelogs.es.md` (Spanish) after the release lands on `main`. Never sync a change that only exists on `development`.
-- Keep the header of each file (title, language links, updated date) and refresh the date line.
-- Spanish section headings: `## Corregido:`, `## Añadido:`, `## Actualizado:`, `## Eliminado:`.
-- `../Hyprland-Dots.wiki` is a separate git repository. Commit and push it separately.
+## ANTI-PATTERNS
+
+- **NEVER answer YES to `copy.sh` Express mode** — overwrites all customizations without per-file prompts. Backups land at `~/.config/hypr-backup-back-up_*/`.
+- **Never hardcode GPU env vars in `env.conf`** — use `supergfxctl -g` dynamic detection via `~/.local/bin/start-hyprland.sh`.
+- **Never run `copy.sh` as root** — script checks and refuses.
+
+## COMMANDS
+
+```bash
+# Install or upgrade dotfiles (interactive)
+./copy.sh
+
+# Quick git pull + re-copy
+./update-dots.sh
+
+# Run express mode (DANGEROUS — overwrites everything)
+./copy.sh --express
+```
+
+## NOTES
+
+- `config/hypr/UserConfigs/` — user overrides that survive copy.sh
+- `config/hypr/UserScripts/` — user custom scripts
+- `scripts/` contains `lib_*.sh` modules used by `copy.sh`; not standalone utilities
