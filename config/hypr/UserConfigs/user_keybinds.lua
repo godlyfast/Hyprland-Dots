@@ -115,3 +115,64 @@ if not submap then
     .. "Copy config/hypr/lua/submap_helper.lua to ~/.config/hypr/lua/ to enable them.")
 end
 
+
+-- ===== Local (godlyfast fork) =====
+local scripts = "$HOME/.config/hypr/scripts"
+
+-- Stock binds SUPER+Tab / SUPER+SHIFT+Tab to group cycling AND next/previous
+-- workspace, so one press did both. Keep group cycling; workspaces stay on
+-- SUPER+period/comma and SUPER+scroll.
+unbind("SUPER", "Tab")
+unbind("SUPER SHIFT", "Tab")
+-- Not dispatch("changegroupactive"): this helper has no case for it and falls back
+-- to hl.dsp.exec_raw, which runs it as a shell command. Same call as stock.
+bind("SUPER", "Tab", function() hl.dispatch(hl.dsp.group.next()) end, { description = "Change Group Forward" })
+bind("SUPER SHIFT", "Tab", function() hl.dispatch(hl.dsp.group.prev()) end, { description = "Change Group Back" })
+
+-- Stock binds these through its dispatch() helper, which has no case for them and
+-- falls back to hl.dsp.exec_raw, i.e. a shell command that does not exist. Native
+-- dispatchers (Hyprland 0.56.2 LuaBindingsDispatchers.cpp), as the .conf binds were.
+local function run(...)
+  local dispatchers = { ... }
+  return function()
+    for _, d in ipairs(dispatchers) do hl.dispatch(d) end
+  end
+end
+-- ALT+Tab: cycle, then raise the newly focused window (.conf: cyclenext + bringactivetotop)
+unbind("ALT", "Tab")
+bind("ALT", "Tab", run(hl.dsp.window.cycle_next(), hl.dsp.window.bring_to_top()), { description = "cycle next window, bring to top" })
+unbind("SUPER CTRL", "J")
+unbind("SUPER CTRL", "L")
+unbind("SUPER CTRL", "H")
+bind("SUPER CTRL", "J", run(hl.dsp.window.move({ into_group = "l" })), { description = "Move left into group" })
+bind("SUPER CTRL", "L", run(hl.dsp.window.move({ into_group = "r" })), { description = "Move Right into group" })
+bind("SUPER CTRL", "H", run(hl.dsp.window.move({ out_of_group = true })), { description = "Move active out of group" })
+for key, dir in pairs({ F9 = "l", F10 = "r", F11 = "u", F12 = "d" }) do
+  unbind("SUPER CTRL", key)
+  bind("SUPER CTRL", key, run(hl.dsp.workspace.move({ monitor = dir })), { description = "move workspace to monitor " .. dir })
+end
+
+-- Apps
+bind("SUPER SHIFT", "T", exec_cmd("thunderbird"), { description = "email (Thunderbird)" })
+bind("SUPER SHIFT", "C", exec_cmd("google-chrome-stable"), { description = "Chrome browser" })
+unbind("SUPER SHIFT", "B") -- stock: static Rainbow Border
+bind("SUPER SHIFT", "B", exec_cmd("brave"), { description = "Brave browser" })
+bind("SUPER ALT", "D", exec_cmd("$HOME/.config/hypr/UserScripts/RofiBrowserSelect.sh"), { description = "default browser picker" })
+
+-- Machine tools
+bind("SUPER CTRL SHIFT", "B", exec_cmd(scripts .. "/SidebarToggle.sh"), { description = "toggle Booru sidebar" })
+bind("SUPER ALT", "I", exec_cmd(scripts .. "/StatusCheck.sh"), { description = "show GPU/power status" })
+-- Not SUPER+ALT+S: stock binds that to the scrolling V/H toggle.
+bind("SUPER ALT", "K", exec_cmd(scripts .. "/SchedulerSwitch.sh"), { description = "cycle scheduler modes" })
+bind("SUPER ALT", "M", exec_cmd("hyprwave-toggle visibility"), { description = "toggle HyprWave visibility" })
+bind("SUPER CTRL", "M", exec_cmd("hyprwave-toggle expand"), { description = "toggle HyprWave expand" })
+bind("SUPER ALT", "W", exec_cmd(scripts .. "/WallpaperChange.sh"), { description = "change wallpaper" })
+-- Stock CTRL+ALT+W points at UserScripts/WallpaperRandom.sh; the script lives in scripts/.
+unbind("CTRL ALT", "W")
+bind("CTRL ALT", "W", exec_cmd(scripts .. "/WallpaperRandom.sh"), { description = "random wallpaper" })
+
+-- ASUS ROG Fn keys
+unbind("", "xf86Launch4")
+bind("", "xf86Launch4", exec_cmd(scripts .. "/ProfileSwitch.sh"), { description = "FN+F5 profile cycling (SmartQuiet)" })
+unbind("", "xf86Launch3")
+bind("", "xf86Launch3", exec_cmd("asusctl aura effect --next-mode"), { description = "FN+F4 keyboard RGB mode" })
