@@ -9,9 +9,9 @@
 
 hl.config({
   input = {
-    kb_layout = "us",
+    kb_layout = "us,ua",
     kb_variant = "",
-    kb_model = "pc105",
+    kb_model = "pc105+inet",
     kb_options = "",
     kb_rules = "",
     repeat_rate = 50,
@@ -30,12 +30,33 @@ hl.config({
       drag_lock = false,
     },
     touchdevice = {
-      enabled = true,
+      enabled = false,
     },
     tablet = {
       transform = 0,
       left_handed = 0,
     },
+  },
+})
+
+-- ===== Local (godlyfast fork): values that differ from lua/settings.lua =====
+hl.config({
+  master = {
+    new_status = "master",
+    new_on_top = true,
+    mfact = 0.5,
+  },
+  general = {
+    allow_tearing = true,
+  },
+  misc = {
+    vrr = 2,
+    -- true lit the panel under a closed lid; ~/.local/bin/lid-panel.sh owns eDP-1 DPMS
+    mouse_move_enables_dpms = false,
+  },
+  cursor = {
+    -- NVIDIA hybrid: hardware cursors glitch
+    no_hardware_cursors = 1,
   },
 })
 
