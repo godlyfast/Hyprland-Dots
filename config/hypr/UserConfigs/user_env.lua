@@ -12,3 +12,7 @@
 -- hl.env("GDK_SCALE", "1")
 -- hl.env("QT_SCALE_FACTOR", "1")
 -- hl.env("WEATHER_UNITS", "metric")
+
+-- Local: nvim, as the retired UserConfigs/01-UserDefaults.conf set it.
+hl.env("EDITOR", "nvim")
+hl.env("VISUAL", "nvim")

@@ -37,10 +37,12 @@ hl.env("XCURSOR_THEME", "Bibata-Modern-Ice")
 hl.env("XCURSOR_SIZE", "24")
 
 -- NVIDIA specific environment variables (enabled by detector when Nvidia GPU present)
-hl.env("LIBVA_DRIVER_NAME", "nvidia")
-hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
-hl.env("NVD_BACKEND", "direct")
-hl.env("GSK_RENDERER", "ngl")
+-- Local: keep commented. ~/.local/bin/start-hyprland.sh sets them per GPU mode
+-- (supergfxctl) before Hyprland starts; hardcoding them breaks Hybrid/Integrated.
+-- hl.env("LIBVA_DRIVER_NAME", "nvidia")
+-- hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
+-- hl.env("NVD_BACKEND", "direct")
+-- hl.env("GSK_RENDERER", "ngl")
 
 -- VM / Software rendering fallback (enabled by detector in VM)
 -- hl.env("WLR_RENDERER_ALLOW_SOFTWARE", "1")

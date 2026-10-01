@@ -92,6 +92,19 @@ local startup_commands = {
   -- "kdeconnect-app",
   -- "blueman-applet",
   -- "$HOME/.config/hypr/UserScripts/RainbowBorders.sh",
+
+  -- ===== Local (godlyfast fork) =====
+  -- (RainbowBorders.sh needs no entry: system RainbowBordersStartup.sh runs it.)
+  "rog-control-center",
+  -- Was stock in configs/Startup_Apps.conf; upstream's Lua startup no longer starts it.
+  "blueman-applet",
+  -- Memory pressure monitor (warns before systemd-oomd kills the session)
+  "$HOME/.config/hypr/scripts/MemoryMonitor.sh",
+  -- Random wallpaper + wallust on login. The sleep lets system startup's
+  -- WallpaperDaemon.sh (itself after `sleep 1`) bring awww up first.
+  "sleep 3; $HOME/.config/hypr/scripts/WallpaperChange.sh $HOME/Pictures/wallpapers",
+  -- Lid closed = eDP-1 DPMS off, open = on (logind LidClosed; see user_laptops.lua)
+  "$HOME/.local/bin/lid-panel.sh",
 }
 
 local function run_startup_commands()
