@@ -16,3 +16,11 @@
 --     position = "auto",
 --     scale = "1",
 -- })
+
+-- Local: internal panel at native mode, 1.6 scale.
+hl.monitor({
+  output = "eDP-1",
+  mode = "2560x1600@240",
+  position = "0x0",
+  scale = "1.6",
+})

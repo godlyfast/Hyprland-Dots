@@ -48,3 +48,11 @@ local apply_layer_rule = user_layer_rules_helper.apply_layer_rule
 --   blur = true,
 --   ignore_alpha = 0,
 -- })
+
+-- Local: HyprWave visualizer blur.
+apply_layer_rule({
+  name = "user-hyprwave-blur",
+  match = { namespace = "hyprwave" },
+  blur = true,
+  ignore_alpha = 0.3,
+})
