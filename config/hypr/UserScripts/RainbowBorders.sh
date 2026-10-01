@@ -87,8 +87,68 @@ function get_color() {
     fi
 }
 
+# Lua config mode rejects `hyprctl keyword` (still exit 0). Setter copied from
+# upstream UserScripts/RainbowBorders.bak.sh: keyword first, then `hyprctl eval`.
+# Usage: set_gradient_border general:col.active_border color0 color1 ... [angledeg]
+set_gradient_border() {
+  local option="$1"
+  shift
+  local angle="270"
+  local -a colors=()
+  local arg c lua_colors expr out
+
+  for arg in "$@"; do
+    if [[ "$arg" =~ ^([0-9]+)deg$ ]]; then
+      angle="${BASH_REMATCH[1]}"
+    else
+      colors+=("$arg")
+    fi
+  done
+
+  ((${#colors[@]} > 0)) || return 1
+
+  # Legacy conf mode.
+  # Note: under Lua config mode hyprctl may exit 0 while still printing
+  # "keyword can't work with non-legacy parsers", so check output too.
+  out="$(hyprctl keyword "$option" "${colors[@]}" "${angle}deg" 2>&1)"
+  rc=$?
+  if [[ $rc -eq 0 && "$out" != *"non-legacy parsers"* && "$out" != *"Use eval"* && "$out" != *"error"* && "$out" != *"invalid"* ]]; then
+    return 0
+  fi
+
+  # Lua config mode rejects keyword; use hl.config via eval.
+  lua_colors=""
+  for c in "${colors[@]}"; do
+    [[ -n "$lua_colors" ]] && lua_colors+=", "
+    lua_colors+="\"${c}\""
+  done
+
+  case "$option" in
+  general:col.active_border)
+    expr="hl.config({ general = { col = { active_border = { colors = { ${lua_colors} }, angle = ${angle} } } } })"
+    ;;
+  general:col.inactive_border)
+    expr="hl.config({ general = { col = { inactive_border = { colors = { ${lua_colors} }, angle = ${angle} } } } })"
+    ;;
+  *)
+    printf '[RainbowBorders] unsupported option for Lua fallback: %s\n' "$option" >&2
+    printf '[RainbowBorders] keyword error: %s\n' "$out" >&2
+    return 1
+    ;;
+  esac
+
+  if out="$(hyprctl eval "$expr" 2>&1)"; then
+    return 0
+  fi
+
+  printf '[RainbowBorders] failed to set %s\n' "$option" >&2
+  printf '[RainbowBorders] keyword error: %s\n' "$out" >&2
+  printf '[RainbowBorders] eval error: %s\n' "$out" >&2
+  return 1
+}
+
 # border effect for ACTIVE window
-hyprctl keyword general:col.active_border $(get_color 0) $(get_color 1) $(get_color 2) $(get_color 3) $(get_color 4) $(get_color 5) $(get_color 6) $(get_color 7) $(get_color 8) $(get_color 9) 270deg
+set_gradient_border general:col.active_border $(get_color 0) $(get_color 1) $(get_color 2) $(get_color 3) $(get_color 4) $(get_color 5) $(get_color 6) $(get_color 7) $(get_color 8) $(get_color 9) 270deg
 
 # border effect for INACTIVE windows
-#hyprctl keyword general:col.inactive_border $(get_color 0) $(get_color 1) $(get_color 2) $(get_color 3) $(get_color 4) $(get_color 5) $(get_color 6) $(get_color 7) $(get_color 8) $(get_color 9) 270deg
+#set_gradient_border general:col.inactive_border $(get_color 0) $(get_color 1) $(get_color 2) $(get_color 3) $(get_color 4) $(get_color 5) $(get_color 6) $(get_color 7) $(get_color 8) $(get_color 9) 270deg

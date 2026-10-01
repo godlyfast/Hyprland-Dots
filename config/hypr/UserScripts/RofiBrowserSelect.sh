@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Rofi picker to switch the system default web browser (xdg-settings).
-# Bound to SUPER+ALT+D in UserConfigs/UserKeybinds.conf.
+# Bound to SUPER+ALT+D in UserConfigs/user_keybinds.lua.
 #
 # Lists every installed .desktop entry that is a WebBrowser and handles https,
 # highlights the current default, and applies the choice with
@@ -16,7 +16,7 @@
 
 set -euo pipefail
 
-rofi_theme="${XDG_CONFIG_HOME:-$HOME/.config}/rofi/config-Animations.rasi"
+rofi_theme="${XDG_CONFIG_HOME:-$HOME/.config}/hypr/rofi/config-Animations.rasi"
 
 current="$(xdg-settings get default-web-browser 2>/dev/null || true)"
 
