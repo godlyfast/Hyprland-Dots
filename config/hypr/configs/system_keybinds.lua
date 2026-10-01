@@ -725,25 +725,25 @@ bind(
   "",
   "xf86audioraisevolume",
   exec_cmd("$HOME/.config/hypr/scripts/Volume.sh --inc"),
-  { description = "volume up", locked = true, ["repeat"] = true }
+  { description = "volume up", locked = true, repeating = true }
 )
 bind(
   "",
   "xf86audiolowervolume",
   exec_cmd("$HOME/.config/hypr/scripts/Volume.sh --dec"),
-  { description = "volume down", locked = true, ["repeat"] = true }
+  { description = "volume down", locked = true, repeating = true }
 )
 bind(
   "ALT",
   "xf86audioraisevolume",
   exec_cmd("$HOME/.config/hypr/scripts/Volume.sh --inc-precise"),
-  { description = "volume up precise", locked = true, ["repeat"] = true }
+  { description = "volume up precise", locked = true, repeating = true }
 )
 bind(
   "ALT",
   "xf86audiolowervolume",
   exec_cmd("$HOME/.config/hypr/scripts/Volume.sh --dec-precise"),
-  { description = "volume down precise", locked = true, ["repeat"] = true }
+  { description = "volume down precise", locked = true, repeating = true }
 )
 bind(
   "",
@@ -798,49 +798,49 @@ bind(
   "",
   "xf86MonBrightnessDown",
   exec_cmd("$HOME/.config/hypr/scripts/Brightness.sh --dec"),
-  { description = "decrease monitor brightness", locked = true, ["repeat"] = true }
+  { description = "decrease monitor brightness", locked = true, repeating = true }
 )
 bind(
   "",
   "xf86MonBrightnessUp",
   exec_cmd("$HOME/.config/hypr/scripts/Brightness.sh --inc"),
-  { description = "increase monitor brightness", locked = true, ["repeat"] = true }
+  { description = "increase monitor brightness", locked = true, repeating = true }
 )
 bind(
   "CTRL ALT",
   "equal",
   exec_cmd("$HOME/.config/hypr/scripts/Brightness.sh --inc"),
-  { description = "increase brightness", locked = true, ["repeat"] = true }
+  { description = "increase brightness", locked = true, repeating = true }
 )
 bind(
   "CTRL ALT",
   "minus",
   exec_cmd("$HOME/.config/hypr/scripts/Brightness.sh --dec"),
-  { description = "decrease brightness", locked = true, ["repeat"] = true }
+  { description = "decrease brightness", locked = true, repeating = true }
 )
 bind(
   "CTRL ALT",
   "KP_Add",
   exec_cmd("$HOME/.config/hypr/scripts/Brightness.sh --inc"),
-  { description = "increase brightness (numpad)", locked = true, ["repeat"] = true }
+  { description = "increase brightness (numpad)", locked = true, repeating = true }
 )
 bind(
   "CTRL ALT",
   "KP_Subtract",
   exec_cmd("$HOME/.config/hypr/scripts/Brightness.sh --dec"),
-  { description = "decrease brightness (numpad)", locked = true, ["repeat"] = true }
+  { description = "decrease brightness (numpad)", locked = true, repeating = true }
 )
 bind(
   "",
   "xf86KbdBrightnessDown",
   exec_cmd("$HOME/.config/hypr/scripts/BrightnessKbd.sh --dec"),
-  { description = "decrease keyboard brightness", locked = true, ["repeat"] = true }
+  { description = "decrease keyboard brightness", locked = true, repeating = true }
 )
 bind(
   "",
   "xf86KbdBrightnessUp",
   exec_cmd("$HOME/.config/hypr/scripts/BrightnessKbd.sh --inc"),
-  { description = "increase keyboard brightness", locked = true, ["repeat"] = true }
+  { description = "increase keyboard brightness", locked = true, repeating = true }
 )
 bind(
   "",
@@ -929,15 +929,15 @@ bind(
   exec_cmd("$HOME/.config/hypr/scripts/ScreenShot.sh --active"),
   { description = "screenshot (active window only)" }
 )
-bind("SUPER SHIFT", "left", dispatch("resizeactive", "-50 0"), { description = "resize left (-50)", ["repeat"] = true })
+bind("SUPER SHIFT", "left", dispatch("resizeactive", "-50 0"), { description = "resize left (-50)", repeating = true })
 bind(
   "SUPER SHIFT",
   "right",
   dispatch("resizeactive", "50 0"),
-  { description = "resize right (+50)", ["repeat"] = true }
+  { description = "resize right (+50)", repeating = true }
 )
-bind("SUPER SHIFT", "up", dispatch("resizeactive", "0 -50"), { description = "resize up (-50)", ["repeat"] = true })
-bind("SUPER SHIFT", "down", dispatch("resizeactive", "0 50"), { description = "resize down (+50)", ["repeat"] = true })
+bind("SUPER SHIFT", "up", dispatch("resizeactive", "0 -50"), { description = "resize up (-50)", repeating = true })
+bind("SUPER SHIFT", "down", dispatch("resizeactive", "0 50"), { description = "resize down (+50)", repeating = true })
 bind("SUPER CTRL", "left", dispatch("movewindow", "l"), { description = "move window left" })
 bind("SUPER CTRL", "right", dispatch("movewindow", "r"), { description = "move window right" })
 bind("SUPER CTRL", "up", dispatch("movewindow", "u"), { description = "move window up" })
