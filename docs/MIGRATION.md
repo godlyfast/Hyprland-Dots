@@ -7,10 +7,15 @@ commits on top of the actively maintained `LinuxBeginnings/Hyprland-Dots` upstre
 (successor of the archived `JaKooLit/Hyprland-Dots`).
 
 **Original migration (JaKooLit → LinuxBeginnings):** 2026-05-05, base v2.3.23
-**Last upgrade:** 2026-10-01, **ported to Lua** on `upstream/main` at v2.3.27.5 (`40203767`).
+**Last upgrade:** 2026-10-02, v2.3.27.7 on stable `upstream/main` (`b4985537`), preserving the nine Lua customization commits.
+**Lua files deployed:** 2026-10-01; the 2026-10-02 update replaces only five changed files and the version marker.
+**Activation pending:** PID 1990 started on 2026-09-29 and still uses Hyprlang: `hyprctl eval` reports
+`eval is only supported with the lua config manager`. Do not reload this session: its legacy entry file
+has been removed. Save work and activate Lua through a fresh login, never an automatic restart.
 Upstream deleted every Hyprlang `.conf` (starting with #128), so the customizations were re-written
-as Lua overrides instead of replaying the 29 `.conf` commits (see "Lua port"). **Not deployed yet:**
-the live session still runs the `.conf` config from the 2026-09-15 deploy until a Lua deploy.
+as Lua overrides instead of replaying the 29 `.conf` commits (see "Lua port").
+Rollback: branch `backup-main-20261002-164457`; full pre-update live tree and verification evidence
+at `~/dots-rollback/update-20261002-164457/`. No package upgrade or remote push was performed.
 Previous upgrades: 2026-09-15, v2.3.26.5 (`5cf37fb4`, last `.conf` base); 2026-08-08, post-v2.3.25.
 **Tracked branch:** `upstream/main` (stable). Do NOT base on `upstream/development`.
 
@@ -260,8 +265,8 @@ Run `./copy.sh --upgrade` (answer **NO** to Express mode; drive it in a tmux pty
 unattended). copy.sh auto-restores the old `UserConfigs/` backup over the freshly-copied ones —
 afterwards re-sync this repo's `UserConfigs/` and custom scripts to `~/.config/hypr/`.
 
-**First Lua deploy (pending):** the live tree still has the `.conf` config and a dormant
-`hyprland.lua.disable`. Expected sequence (re-check the prompts on the day):
+**Historical first Lua file deploy (2026-10-01):** the previous tree had the `.conf` config and a dormant
+`hyprland.lua.disable`. This sequence documents that migration, not the 2026-10-02 targeted update:
 1. Answer **`y`** to `Configuration will be migrated to LUA. Continue?` (`lib_prompts.sh`). The
    `.conf`-era answer was `n`, but upstream no longer ships any `.conf`, so `n` would leave
    `hyprland.lua.disable` on a tree with nothing to load. `y` runs `migrate-hypr-to-lua.sh` on the
@@ -271,9 +276,9 @@ afterwards re-sync this repo's `UserConfigs/` and custom scripts to `~/.config/h
    copy.sh's restore puts the old backup back with `rsync -a`, and the stale `kitty.conf` matters:
    under Lua, `lua/env.lua` points `KITTY_CONFIG_DIRECTORY` at `UserConfigs`, so it becomes kitty's
    active config (old font, no black background, `allow_remote_control yes`).
-3. Confirm Hyprland loads `hyprland.lua` (`hyprctl dispatch hl.dsp.dpms '{ action = "on" }'` answers
-   `ok`, not `Invalid dispatcher`), and keep `~/.local/bin/lid-panel.sh` (machine-local, not in this
-   repo).
+3. After a fresh login, confirm Lua is active with the read-only query
+   `hyprctl eval 'return hl.get_config("cursor.no_hardware_cursors")'`; a Hyprlang-manager error
+   means activation is still pending. Keep `~/.local/bin/lid-panel.sh` (machine-local, not in this repo).
 
 Then re-verify the machine-local invariants copy.sh is known to clobber (see workstation skill):
 
