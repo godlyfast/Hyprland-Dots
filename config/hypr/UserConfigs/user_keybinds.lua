@@ -156,7 +156,7 @@ end
 bind("SUPER SHIFT", "T", exec_cmd("thunderbird"), { description = "email (Thunderbird)" })
 bind("SUPER SHIFT", "C", exec_cmd("google-chrome-stable"), { description = "Chrome browser" })
 unbind("SUPER SHIFT", "B") -- stock: static Rainbow Border
-bind("SUPER SHIFT", "B", exec_cmd("brave"), { description = "Brave browser" })
+bind("SUPER SHIFT", "B", exec_cmd("firefox"), { description = "Firefox browser" })
 bind("SUPER ALT", "D", exec_cmd("$HOME/.config/hypr/UserScripts/RofiBrowserSelect.sh"), { description = "default browser picker" })
 
 -- Machine tools

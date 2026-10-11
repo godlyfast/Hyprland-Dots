@@ -7,15 +7,23 @@ commits on top of the actively maintained `LinuxBeginnings/Hyprland-Dots` upstre
 (successor of the archived `JaKooLit/Hyprland-Dots`).
 
 **Original migration (JaKooLit → LinuxBeginnings):** 2026-05-05, base v2.3.23
-**Last upgrade:** 2026-10-02, v2.3.27.7 on stable `upstream/main` (`b4985537`), preserving the nine Lua customization commits.
-**Lua files deployed:** 2026-10-01; the 2026-10-02 update replaces only five changed files and the version marker.
-**Activation pending:** PID 1990 started on 2026-09-29 and still uses Hyprlang: `hyprctl eval` reports
-`eval is only supported with the lua config manager`. Do not reload this session: its legacy entry file
-has been removed. Save work and activate Lua through a fresh login, never an automatic restart.
+**Last upgrade:** 2026-10-11, v2.3.27.7 plus stable `upstream/main` changes through `c8c598d2`, with fork commits rebased on top.
+**Latest repository sync:** 2026-10-11, rebased onto stable `upstream/main` (`c8c598d2`).
+Added upstream's multilingual keyboard example; retained the fork's `us,ua` layout and
+`pc105+inet` model instead of upstream's empty model default. SUPER+SHIFT+B now launches Firefox.
+**Live deployment:** 2026-10-11, targeted sync of `UserConfigs/user_settings.lua`,
+`UserConfigs/user_keybinds.lua`, and `lua/env.lua`; only `user_settings.lua` needed new content.
+The Firefox binding and version file already matched. The broader installer was unnecessary:
+live T3 capture, 24-hour clocks, wallpaper/colors, and Waybar selections were preserved.
+**Lua activation:** confirmed on 2026-10-11; `hyprctl reload` succeeded without restarting
+Hyprland 0.56.2 (PID 2244). No config errors or duplicate chords; Firefox and T3 bindings remain
+active, and eDP-1 stays at 2560×1600@240, scale 1.6.
+**Verification:** repository and staged-live `tools/verify-lua.sh` pass.
 Upstream deleted every Hyprlang `.conf` (starting with #128), so the customizations were re-written
 as Lua overrides instead of replaying the 29 `.conf` commits (see "Lua port").
-Rollback: branch `backup-main-20261002-164457`; full pre-update live tree and verification evidence
-at `~/dots-rollback/update-20261002-164457/`. No package upgrade or remote push was performed.
+Rollback: local branch `backup-main-20261011-131603`, published-history snapshot
+`backup-origin-main-20261011-131603`, and live config archive plus pre-update working files
+at `~/dots-rollback/update-20261011-131603/`. Package upgrades are out of scope.
 Previous upgrades: 2026-09-15, v2.3.26.5 (`5cf37fb4`, last `.conf` base); 2026-08-08, post-v2.3.25.
 **Tracked branch:** `upstream/main` (stable). Do NOT base on `upstream/development`.
 
@@ -121,7 +129,7 @@ to `hl.dsp.exec_raw`, i.e. a shell command; the same fallback in `configs/system
 | SUPER+CTRL+J / L / H | move into group left / right, out of group | native `hl.dsp.window.move`; stock's binds ran a non-existent shell command |
 | SUPER+CTRL+F9–F12 | move workspace to monitor l / r / u / d | native `hl.dsp.workspace.move`; same stock bug |
 | CTRL+ALT+W | random wallpaper (`scripts/WallpaperRandom.sh`) | stock path points at `UserScripts/`, where the script is not |
-| SUPER+SHIFT+T / C / B | Thunderbird / Chrome / Brave | B replaces stock static rainbow border |
+| SUPER+SHIFT+T / C / B | Thunderbird / Chrome / Firefox | B replaces stock static rainbow border |
 | SUPER+ALT+D | default-browser picker (`UserScripts/RofiBrowserSelect.sh`) | rofi list of WebBrowser .desktop entries → `xdg-settings set default-web-browser`; also CLI `--get/--list/--set`; live-only symlink `~/.local/bin/default-browser` → the script (recreate if missing) |
 | SUPER+CTRL+SHIFT+B | Booru sidebar (`SidebarToggle.sh`) | quickshell `booru-sidebar` config |
 | SUPER+ALT+I / K / W | status / scheduler cycle / wallpaper | K, not stock-owned SUPER+ALT+S (scrolling V/H toggle) |
