@@ -16,7 +16,12 @@
 --     layout = "dwindle",
 -- })
 
--- Local: pin the primary workspaces to the internal panel.
+-- Local: workspaces live on the output that renders the desktop: the Moonlight virtual desktop
+-- while the lid is closed (Sunshine captures it, eDP-1 mirrors it), eDP-1 otherwise. See stream-route.sh.
+local flag = io.open((os.getenv("XDG_RUNTIME_DIR") or "/tmp") .. "/hypr-stream-route")
+local streaming = flag ~= nil
+if flag then flag:close() end
+
 for ws = 1, 5 do
-  hl.workspace_rule({ workspace = tostring(ws), monitor = "eDP-1", layout = "dwindle" })
+  hl.workspace_rule({ workspace = tostring(ws), monitor = streaming and "Moonlight" or "eDP-1", layout = "dwindle" })
 end

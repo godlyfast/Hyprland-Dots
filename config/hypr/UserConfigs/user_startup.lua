@@ -103,7 +103,8 @@ local startup_commands = {
   -- Random wallpaper + wallust on login. The sleep lets system startup's
   -- WallpaperDaemon.sh (itself after `sleep 1`) bring awww up first.
   "sleep 3; $HOME/.config/hypr/scripts/WallpaperChange.sh $HOME/Pictures/wallpapers",
-  -- Lid closed = eDP-1 DPMS off, open = on (logind LidClosed; see user_laptops.lua)
+  -- Lid closed = Moonlight virtual desktop for Sunshine + eDP-1 DPMS off, open = direct panel
+  -- (logind LidClosed; creates/removes the Moonlight output via stream-route.sh; see user_laptops.lua)
   "$HOME/.local/bin/lid-panel.sh",
 }
 
