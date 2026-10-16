@@ -18,10 +18,10 @@
 -- })
 
 -- Lid open: eDP-1 renders directly and Moonlight is disabled. Lid closed: the Moonlight virtual desktop
--- (Sunshine's capture) owns the workspaces and eDP-1 is disabled. Exactly one is enabled, so a lid
--- change mid-stream makes Sunshine's capture fail and reselect the other output. (A lit eDP-1 mirroring
--- Moonlight rendered every frame twice and lagged the desktop; a dark mirror never failed, so the
--- stream went black.) ~/.local/bin/stream-route.sh (driven by lid-panel.sh) sets these flags and
+-- (Sunshine's capture) owns the workspaces and eDP-1 is disabled. Exactly one is enabled, so a new
+-- stream picks the right output; a running one can't switch, so lid-panel.sh ends it on a lid change.
+-- (A lit eDP-1 mirroring Moonlight rendered every frame twice and lagged the desktop.)
+-- ~/.local/bin/stream-route.sh (driven by lid-panel.sh) sets these flags and
 -- reloads in two steps, both outputs enabled in between, so Hyprland never falls back to a headless output.
 local function flag(name)
   local f = io.open((os.getenv("XDG_RUNTIME_DIR") or "/tmp") .. "/" .. name)
