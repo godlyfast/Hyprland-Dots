@@ -16,12 +16,12 @@
 --     layout = "dwindle",
 -- })
 
--- Local: workspaces live on the output that renders the desktop: the Moonlight virtual desktop
--- while the lid is closed (Sunshine captures it, eDP-1 mirrors it), eDP-1 otherwise. See stream-route.sh.
-local flag = io.open((os.getenv("XDG_RUNTIME_DIR") or "/tmp") .. "/hypr-stream-route")
-local streaming = flag ~= nil
-if flag then flag:close() end
+-- Local: workspaces live on the enabled output: the Moonlight virtual desktop while the lid is
+-- closed (eDP-1 disabled, Sunshine captures Moonlight), eDP-1 otherwise. See stream-route.sh.
+local f = io.open((os.getenv("XDG_RUNTIME_DIR") or "/tmp") .. "/hypr-panel-off")
+local panel_off = f ~= nil
+if f then f:close() end
 
 for ws = 1, 5 do
-  hl.workspace_rule({ workspace = tostring(ws), monitor = streaming and "Moonlight" or "eDP-1", layout = "dwindle" })
+  hl.workspace_rule({ workspace = tostring(ws), monitor = panel_off and "Moonlight" or "eDP-1", layout = "dwindle" })
 end
