@@ -12,9 +12,10 @@
 -- output, so it is replaced here. The lid is handled outside Hyprland's config:
 --   * logind HandleLidSwitch=ignore (/etc/systemd/logind.conf.d/lid-switch.conf):
 --     closing the lid never suspends, so agents keep running.
---   * ~/.local/bin/lid-panel.sh (user_startup.lua) follows logind's LidClosed and
---     turns eDP-1 DPMS off/on. Not switch:on/off binds: libinput fakes a lid-open
---     on internal key presses and would light the panel under the lid.
+--   * ~/.local/bin/lid-panel.sh (user_startup.lua) follows logind's LidClosed: closed
+--     disables eDP-1 and enables the Moonlight virtual output (stream-route.sh), open
+--     reverses it. Not switch:on/off binds: libinput fakes a lid-open on internal key
+--     presses and would light the panel under the lid.
 -- Fn+F4/Fn+F5 are bound in user_keybinds.lua.
 
 -- Touchpad off by default; Fn+F10 (scripts/TouchPad.sh) toggles it.

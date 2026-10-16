@@ -19,17 +19,19 @@
 
 -- Lid open: eDP-1 renders directly and Moonlight is disabled. Lid closed: the Moonlight virtual desktop
 -- (Sunshine's capture) owns the workspaces and eDP-1 is disabled. Exactly one is enabled, so a new
--- stream picks the right output; a running one can't switch, so lid-panel.sh ends it on a lid change.
+-- stream picks the right output; a running one does not reliably switch, so lid-panel.sh ends it on a lid change.
 -- (A lit eDP-1 mirroring Moonlight rendered every frame twice and lagged the desktop.)
 -- ~/.local/bin/stream-route.sh (driven by lid-panel.sh) sets these flags and
 -- reloads in two steps, both outputs enabled in between, so Hyprland never falls back to a headless output.
+-- Flags live in this Hyprland instance's runtime dir, so a crash-restart or re-login starts lid-open.
 local function flag(name)
-  local f = io.open((os.getenv("XDG_RUNTIME_DIR") or "/tmp") .. "/" .. name)
+  local f = io.open((os.getenv("XDG_RUNTIME_DIR") or "/tmp") .. "/hypr/"
+    .. (os.getenv("HYPRLAND_INSTANCE_SIGNATURE") or "none") .. "/" .. name)
   if f then f:close() end
   return f ~= nil
 end
-local moonlight_on = flag("hypr-moonlight-on")
-local panel_off = flag("hypr-panel-off")
+local moonlight_on = flag("moonlight-on")
+local panel_off = flag("panel-off")
 
 hl.monitor({
   output = "Moonlight",

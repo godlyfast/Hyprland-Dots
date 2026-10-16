@@ -18,7 +18,8 @@
 
 -- Local: workspaces live on the enabled output: the Moonlight virtual desktop while the lid is
 -- closed (eDP-1 disabled, Sunshine captures Moonlight), eDP-1 otherwise. See stream-route.sh.
-local f = io.open((os.getenv("XDG_RUNTIME_DIR") or "/tmp") .. "/hypr-panel-off")
+local f = io.open((os.getenv("XDG_RUNTIME_DIR") or "/tmp") .. "/hypr/"
+  .. (os.getenv("HYPRLAND_INSTANCE_SIGNATURE") or "none") .. "/panel-off")
 local panel_off = f ~= nil
 if f then f:close() end
 

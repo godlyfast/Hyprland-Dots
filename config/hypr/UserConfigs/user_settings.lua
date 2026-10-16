@@ -51,7 +51,7 @@ hl.config({
   },
   misc = {
     vrr = 2,
-    -- true lit the panel under a closed lid; ~/.local/bin/lid-panel.sh owns eDP-1 DPMS
+    -- true lit the panel under a closed lid; ~/.local/bin/lid-panel.sh disables eDP-1 while closed and wakes it on open
     mouse_move_enables_dpms = false,
   },
   cursor = {
