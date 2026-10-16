@@ -82,8 +82,12 @@ whenever the lid is closed (at load, on every reload and on each lid event). eDP
 monitor here, so that strands every workspace on a headless fallback output. The lid stays outside
 the Hyprland config: logind `HandleLidSwitch=ignore` (`/etc/systemd/logind.conf.d/lid-switch.conf`,
 closing the lid never suspends so agents keep running) and the machine-local
-`~/.local/bin/lid-panel.sh`, which follows logind's `LidClosed` and turns eDP-1 DPMS off/on. It tries
-the Lua `hl.dsp.dpms` dispatcher first and falls back to the `.conf` form, so it works on both.
+`~/.local/bin/lid-panel.sh`, which follows logind's `LidClosed`. Since 2026-10-16 it runs
+`stream-route.sh sync`: lid closed disables eDP-1 and enables the `Moonlight` headless output (Sunshine's
+capture), lid open reverses it. Exactly one output is enabled; flags in the Hyprland instance dir are
+read by `UserConfigs/monitors.lua` + `workspaces.lua`. The routing needs the Lua config. Its DPMS-on
+wake tries the Lua `hl.dsp.dpms` dispatcher first and falls back to the `.conf` form. Runbook: homelab
+`docs/workstation-hyprland.md` "Sunshine closed-lid streaming without local lag".
 Not `switch:` binds: libinput fakes a lid-open on internal key presses and lit the panel under the lid.
 
 **Not ported (obsolete on the Lua base):** brightness-key de-duplication (Lua binds them once);
@@ -286,7 +290,8 @@ afterwards re-sync this repo's `UserConfigs/` and custom scripts to `~/.config/h
    active config (old font, no black background, `allow_remote_control yes`).
 3. After a fresh login, confirm Lua is active with the read-only query
    `hyprctl eval 'return hl.get_config("cursor.no_hardware_cursors")'`; a Hyprlang-manager error
-   means activation is still pending. Keep `~/.local/bin/lid-panel.sh` (machine-local, not in this repo).
+   means activation is still pending. Keep `~/.local/bin/{lid-panel,stream-route,stream-route-check}.sh`
+   (machine-local; sources in the homelab repo `scripts/`).
 
 Then re-verify the machine-local invariants copy.sh is known to clobber (see workstation skill):
 
@@ -315,8 +320,9 @@ Then re-verify the machine-local invariants copy.sh is known to clobber (see wor
     updater reads `DOTS_VERSION` from it
 12. kitty: `~/.config/hypr/UserConfigs/kitty.conf` has `font_family JetBrainsMono Nerd Font Mono`,
     `background #000000` after the theme include, and `allow_remote_control socket-only`
-13. Lid: exactly one `~/.local/bin/lid-panel.sh` running; closing the lid turns eDP-1 DPMS off
-    (`cat /sys/class/drm/card*-eDP-1/dpms` → `Off`) and opening it turns it back on
+13. Lid: exactly one `~/.local/bin/lid-panel.sh` running. With the lid closed, `stream-route-check.sh stream`
+    passes (only Moonlight enabled, 60 Hz). With it open, `stream-route-check.sh direct` passes (only
+    eDP-1, 240 Hz)
 
 Waybar `ModulesWorkspaces` icons are committed in this repo and deploy with copy.sh.
 
