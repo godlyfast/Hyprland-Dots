@@ -1,0 +1,19 @@
+    -- No external displays connected, so the internal panel is the ONLY screen.
+    -- It stays on whatever the lid is doing: a closed lid with nothing else to
+    -- show the session must not blank the panel, or the laptop goes dark with no
+    -- way back. Mode and scale are still taken from the stored config, but its
+    -- on/off state and position are overridden - a single monitor belongs at the
+    -- origin, and the stored config may belong to a monitor set that had more.
+    local int_cfg = get_monitor_config(internal)
+    local int_on = {
+      output = internal,
+      disabled = false,
+      mode = (int_cfg and int_cfg.mode) or default_fallback.mode or "preferred",
+      position = "0x0",
+      scale = (int_cfg and int_cfg.scale) or default_fallback.scale or "auto",
+    }
+    if int_cfg and int_cfg.transform then
+      int_on.transform = int_cfg.transform
+    end
+    hl.monitor(int_on)
+  end

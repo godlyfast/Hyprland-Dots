@@ -7,24 +7,36 @@ commits on top of the actively maintained `LinuxBeginnings/Hyprland-Dots` upstre
 (successor of the archived `JaKooLit/Hyprland-Dots`).
 
 **Original migration (JaKooLit → LinuxBeginnings):** 2026-05-05, base v2.3.23
-**Last upgrade:** 2026-10-11, v2.3.27.7 plus stable `upstream/main` changes through `c8c598d2`, with fork commits rebased on top.
-**Latest repository sync:** 2026-10-11, rebased onto stable `upstream/main` (`c8c598d2`).
-Added upstream's multilingual keyboard example; retained the fork's `us,ua` layout and
-`pc105+inet` model instead of upstream's empty model default. SUPER+SHIFT+B now launches Firefox.
-**Live deployment:** 2026-10-11, targeted sync of `UserConfigs/user_settings.lua`,
-`UserConfigs/user_keybinds.lua`, and `lua/env.lua`; only `user_settings.lua` needed new content.
-The Firefox binding and version file already matched. The broader installer was unnecessary:
-live T3 capture, 24-hour clocks, wallpaper/colors, and Waybar selections were preserved.
-**Lua activation:** confirmed on 2026-10-11; `hyprctl reload` succeeded without restarting
-Hyprland 0.56.2 (PID 2244). No config errors or duplicate chords; Firefox and T3 bindings remain
-active, and eDP-1 stays at 2560×1600@240, scale 1.6.
-**Verification:** repository and staged-live `tools/verify-lua.sh` pass.
-Upstream deleted every Hyprlang `.conf` (starting with #128), so the customizations were re-written
-as Lua overrides instead of replaying the 29 `.conf` commits (see "Lua port").
-Rollback: local branch `backup-main-20261011-131603`, published-history snapshot
-`backup-origin-main-20261011-131603`, and live config archive plus pre-update working files
-at `~/dots-rollback/update-20261011-131603/`. Package upgrades are out of scope.
-Previous upgrades: 2026-09-15, v2.3.26.5 (`5cf37fb4`, last `.conf` base); 2026-08-08, post-v2.3.25.
+**Last upgrade:** 2026-10-26, v2.3.28 plus stable `upstream/main` through `b7834c15`.
+**Latest repository sync:** normal merge of 55 upstream commits into `7938ebb8`;
+existing fork history is preserved, with no force push.
+**Live deployment:** 2026-10-26, staged and verified repository delta (129 paths),
+with three-way preservation of live changes rather than running `copy.sh`.
+T3 capture, 24-hour clocks, generated colors, wallpaper, kitty settings and Waybar
+selection symlinks were preserved. Retired Lua helper scripts were removed.
+**Runtime verification:** `hyprctl reload` succeeded; Hyprland PID 2416 was unchanged.
+All 208 live binds remain collision-free. eDP-1 remains 2560×1600@240, scale 1.6;
+`stream-route-check.sh direct` passes. Exactly one hypridle runs, its unit remains
+disabled, and the notification D-Bus owner is present. Waybar was reloaded.
+**Offline verification:** repository and staged-live `tools/verify-lua.sh` pass;
+the adapted upstream suite passes 680 checks. Two patch tests now use pinned
+upstream lid-block fixtures, plus three checks that patches 83/84 preserve the
+fork's custom laptop file. All 677 pristine-upstream checks passed before merging.
+**Compatibility decisions:** keep logind/`lid-panel.sh` in charge of displays.
+Do not autostart upstream `MonitorWatcher.sh`, which would compete with streaming
+routing. Keep SUPER+ALT+D/W as browser picker/wallpaper rather than upstream's
+new display-layout binds. Display-profile tools are installed but opt-in; selecting
+a profile can rewrite `UserConfigs/monitors.lua`. GPU/software-rendering env defaults
+stay commented. Upstream's in-process window actions, keybind index, event-driven
+Waybar modules and `LuaConfigWatch.sh` are active. A saved Lua override triggered
+one reload through the new watcher without errors.
+Rollback: local branches `backup-main-20261026-100111` and
+`backup-origin-main-20261026-100111`, plus `live-hypr-before.tar.gz`, deployment
+manifest, verified staging and logs in `~/dots-rollback/update-20261026-100111/`.
+No packages were upgraded and the compositor was not restarted. Lid-closed login,
+reboot, suspend/resume and a live Sunshine transition were not retested.
+Previous upgrades: 2026-10-11, v2.3.27.7 plus `c8c598d2`; 2026-09-15,
+v2.3.26.5 (`5cf37fb4`, last `.conf` base); 2026-08-08, post-v2.3.25.
 **Tracked branch:** `upstream/main` (stable). Do NOT base on `upstream/development`.
 
 ---
