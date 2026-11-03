@@ -6,5 +6,21 @@
 /* IMPORTANT, be mindful with , or ". else waybar will not start */
 
 {
+// Keep the taskbar in numeric desktop order, not window creation/focus order.
+"hyprland/workspaces#taskbar": {
+	"format": "{windows}",
+	"sort-by": "number",
+	"all-outputs": false,
+	"show-special": true,
+	"workspace-taskbar": {
+		"enable": true,
+		"format": "{icon} {title:.12}",
+		"icon-size": 16,
+		"update-active-window": true,
+		"active-window-position": "none",
+		"ignore-list": ["wofi", "rofi", "kitty-dropterm"],
+		"on-click-window": "case {button} in 1) hyprctl dispatch \"hl.dsp.focus({ window = 'address:{address}' })\" ;; 2) hyprctl dispatch \"hl.dsp.window.close({ window = 'address:{address}' })\" ;; esac"
+	}
+},
 
 }

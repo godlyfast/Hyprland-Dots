@@ -15,7 +15,8 @@
 
 window#waybar {
   background: black;
-  border-radius: 12px;
+  /* Opaque screen-edge corners avoid intermittent transparent-corner repainting. */
+  border-radius: 0;
   /* Waybar scaling: adjust font-size to scale the bar */
   font-size: 14px;
 }
@@ -91,6 +92,11 @@ tooltip label {
   padding-right: 2px;
   animation: gradient_f 20s ease-in infinite;
   transition: all 0.3s cubic-bezier(0.55, -0.68, 0.48, 1.682);
+}
+
+/* Workspace groups wrap individual task buttons; avoid padding both layers. */
+window#waybar.bottombar #workspaces > button {
+  padding: 0;
 }
 
 #backlight,

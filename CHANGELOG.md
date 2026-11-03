@@ -1,5 +1,17 @@
 # Changelog — KoolDots
 
+## Unreleased (local fork, 2026-11-03)
+
+- SummitSplit v3's bottom taskbar now follows numeric virtual-desktop order.
+  - Uses the native Hyprland workspace taskbar, configured in `UserModules`.
+  - Focus changes do not reshuffle tasks; desktop moves update their position.
+  - Keeps icons, short window labels, left-click focus and middle-click close
+    through the Lua dispatcher API.
+- Normal Kitty windows are no longer excluded from the legacy taskbar.
+- Obsidian Edge panels use opaque square corners to stop intermittent repainting
+  of their transparent rounded edges. Application-window decorations are unchanged.
+  - Workspace task groups avoid double-padding their nested task buttons.
+
 ## v2.3.28
 
 ## Fixed:

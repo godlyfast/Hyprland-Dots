@@ -73,7 +73,7 @@
       "reload_style_on_change": true,
       "modules-left": [        "hyprland/window",
       "custom/cava_mviz", "custom/playerctl"],
-      "modules-center": ["hyprland/submap", "wlr/taskbar"],
+      "modules-center": ["hyprland/submap", "hyprland/workspaces#taskbar"],
       "modules-right": ["custom/backlight",
       "backlight/slider",
       "custom/speaker",
