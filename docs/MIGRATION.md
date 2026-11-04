@@ -7,8 +7,8 @@ commits on top of the actively maintained `LinuxBeginnings/Hyprland-Dots` upstre
 (successor of the archived `JaKooLit/Hyprland-Dots`).
 
 **Original migration (JaKooLit → LinuxBeginnings):** 2026-05-05, base v2.3.23
-**Last upgrade:** 2026-10-26, v2.3.28 plus stable `upstream/main` through `b7834c15`.
-**Latest repository sync:** normal merge of 55 upstream commits into `7938ebb8`;
+**Last upgrade:** 2026-11-04, v2.3.28.1 (`2fe484de`).
+**Latest repository sync:** normal merge of one upstream commit into the customized `main`;
 existing fork history is preserved, with no force push.
 **Live deployment:** 2026-10-26, staged and verified repository delta (129 paths),
 with three-way preservation of live changes rather than running `copy.sh`.
@@ -18,10 +18,15 @@ selection symlinks were preserved. Retired Lua helper scripts were removed.
 All 208 live binds remain collision-free. eDP-1 remains 2560×1600@240, scale 1.6;
 `stream-route-check.sh direct` passes. Exactly one hypridle runs, its unit remains
 disabled, and the notification D-Bus owner is present. Waybar was reloaded.
-**Offline verification:** repository and staged-live `tools/verify-lua.sh` pass;
-the adapted upstream suite passes 680 checks. Two patch tests now use pinned
-upstream lid-block fixtures, plus three checks that patches 83/84 preserve the
-fork's custom laptop file. All 677 pristine-upstream checks passed before merging.
+**Repository offline verification (2026-11-04):** `tools/verify-lua.sh` passes with
+206 binds and no reported collisions, missing exec targets or bad options. All 20
+config test scripts pass 696 checks, including the new upstream keybind-helper patch
+suite. The live deployment and runtime results above remain the 2026-10-26 record;
+new deployment and runtime verification are pending.
+**Previous offline verification (2026-10-26):** repository and staged-live
+`tools/verify-lua.sh` passed; the adapted upstream suite passed 680 checks. Two patch
+tests used pinned upstream lid-block fixtures, plus three checks that patches 83/84
+preserved the fork's custom laptop file. All 677 pristine-upstream checks passed before merging.
 **Compatibility decisions:** keep logind/`lid-panel.sh` in charge of displays.
 Do not autostart upstream `MonitorWatcher.sh`, which would compete with streaming
 routing. Keep SUPER+ALT+D/W as browser picker/wallpaper rather than upstream's
@@ -30,7 +35,10 @@ a profile can rewrite `UserConfigs/monitors.lua`. GPU/software-rendering env def
 stay commented. Upstream's in-process window actions, keybind index, event-driven
 Waybar modules and `LuaConfigWatch.sh` are active. A saved Lua override triggered
 one reload through the new watcher without errors.
-Rollback: local branches `backup-main-20261026-100111` and
+Repository rollback for the 2026-11-04 sync: local branches
+`backup-main-20261104-114849` and `backup-origin-main-20261104-114849`, plus
+`/tmp/hyprland-upgrade-20261104/hyprland-dots-pre-20261104-114849.bundle`.
+Previous deployment rollback: local branches `backup-main-20261026-100111` and
 `backup-origin-main-20261026-100111`, plus `live-hypr-before.tar.gz`, deployment
 manifest, verified staging and logs in `~/dots-rollback/update-20261026-100111/`.
 No packages were upgraded and the compositor was not restarted. Lid-closed login,
