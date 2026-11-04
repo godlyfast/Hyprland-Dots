@@ -10,19 +10,28 @@ commits on top of the actively maintained `LinuxBeginnings/Hyprland-Dots` upstre
 **Last upgrade:** 2026-11-04, v2.3.28.1 (`2fe484de`).
 **Latest repository sync:** normal merge of one upstream commit into the customized `main`;
 existing fork history is preserved, with no force push.
-**Live deployment:** 2026-10-26, staged and verified repository delta (129 paths),
-with three-way preservation of live changes rather than running `copy.sh`.
-T3 capture, 24-hour clocks, generated colors, wallpaper, kitty settings and Waybar
-selection symlinks were preserved. Retired Lua helper scripts were removed.
-**Runtime verification:** `hyprctl reload` succeeded; Hyprland PID 2416 was unchanged.
-All 208 live binds remain collision-free. eDP-1 remains 2560×1600@240, scale 1.6;
-`stream-route-check.sh direct` passes. Exactly one hypridle runs, its unit remains
-disabled, and the notification D-Bus owner is present. Waybar was reloaded.
+**Live deployment:** 2026-11-04 from `6cf81d6e`, using an 8-candidate staged
+manifest with three-way live preservation rather than `copy.sh`. Four paths actually
+changed (`lua/env.lua`, the new keybind-helper test, and the old/new version markers);
+all four Waybar candidates were byte/mode-identical no-ops. The protected-path
+inventory changed at only those four paths. T3 capture, 24-hour clocks, generated
+colors, wallpaper, kitty settings and Waybar selection symlinks were preserved.
+**Runtime verification:** `hyprctl reload` succeeded; Hyprland PID 4204 was unchanged
+and `hyprctl configerrors` was empty. eDP-1 remains 2560×1600@240, scale 1.6, DPMS on;
+Moonlight remains disabled and `stream-route-check.sh direct` passes. Exactly one
+hypridle, Sunshine, polkit and Waybar retained their prior PIDs and unit states.
+Exactly one LuaConfigWatch and one inotify child were restored; no MonitorWatcher
+started. Waybar was not reloaded because none of its files changed. A cropped
+rendered top-bar image and compositor layer state confirmed the active desktop.
 **Repository offline verification (2026-11-04):** `tools/verify-lua.sh` passes with
 206 binds and no reported collisions, missing exec targets or bad options. All 20
 config test scripts pass 696 checks, including the new upstream keybind-helper patch
-suite. The live deployment and runtime results above remain the 2026-10-26 record;
-new deployment and runtime verification are pending.
+suite.
+**Staged-live offline verification (2026-11-04):** `tools/verify-lua.sh` passes.
+The staged `run-all.sh` sweep passes 579 checks with zero failures; its
+installer-dependent one-check entries are skips, not full suite coverage. The actual
+isolated keybind-helper suite separately passes all 16 assertions with `patches/lib.sh`
+and patch 90 present.
 **Previous offline verification (2026-10-26):** repository and staged-live
 `tools/verify-lua.sh` passed; the adapted upstream suite passed 680 checks. Two patch
 tests used pinned upstream lid-block fixtures, plus three checks that patches 83/84
@@ -38,13 +47,19 @@ one reload through the new watcher without errors.
 Repository rollback for the 2026-11-04 sync: local branches
 `backup-main-20261104-114849` and `backup-origin-main-20261104-114849`, plus
 `/tmp/hyprland-upgrade-20261104/hyprland-dots-pre-20261104-114849.bundle`.
+Deployment rollback: `~/dots-rollback/update-20261104-121125/` (mode 0700) contains
+the mode-0600 full pre-apply `live-hypr-before.tar.gz`, manifest/source refs,
+before/after runtime evidence, watcher PID records and protected inventories.
 Previous deployment rollback: local branches `backup-main-20261026-100111` and
 `backup-origin-main-20261026-100111`, plus `live-hypr-before.tar.gz`, deployment
 manifest, verified staging and logs in `~/dots-rollback/update-20261026-100111/`.
-No packages were upgraded and the compositor was not restarted. Lid-closed login,
-reboot, suspend/resume and a live Sunshine transition were not retested.
-Previous upgrades: 2026-10-11, v2.3.27.7 plus `c8c598d2`; 2026-09-15,
-v2.3.26.5 (`5cf37fb4`, last `.conf` base); 2026-08-08, post-v2.3.25.
+This dotfiles upgrade changed no packages and did not restart the compositor; the
+pre-existing 0.57.0-running/0.57.1-installed drift remains. Lid-closed login,
+reboot, suspend/resume, physical lock/unlock, interactive menus/binds and a live
+Sunshine transition were not retested.
+Previous upgrades: 2026-10-26, v2.3.28 plus `b7834c15`; 2026-10-11, v2.3.27.7 plus
+`c8c598d2`; 2026-09-15, v2.3.26.5 (`5cf37fb4`, last `.conf` base); 2026-08-08,
+post-v2.3.25.
 **Tracked branch:** `upstream/main` (stable). Do NOT base on `upstream/development`.
 
 ---
@@ -56,8 +71,9 @@ v2.3.26.5 (`5cf37fb4`, last `.conf` base); 2026-08-08, post-v2.3.25.
 | `Hyprland-Dots` | Dotfiles/configs (`config/`, `copy.sh`) | fork `godlyfast/Hyprland-Dots` (origin) + `LinuxBeginnings/Hyprland-Dots` (upstream) |
 | `Arch-Hyprland` | Installer scripts | **no fork** — tracks `LinuxBeginnings/Arch-Hyprland` directly (fork dropped 2026-08-08: it had zero unique commits and the installer clones the Dots repo itself) |
 
-The installer clones `LinuxBeginnings/Hyprland-Dots` during install; on this machine,
-deploy from `~/Hyprland-Dots` (this fork) with `copy.sh` instead.
+The installer clones `LinuxBeginnings/Hyprland-Dots` during install. On this machine,
+deploy from `~/Hyprland-Dots` (this fork) with the reviewed staged-delta and
+three-way preservation procedure below, not with `copy.sh`.
 
 ---
 
