@@ -7,9 +7,10 @@ commits on top of the actively maintained `LinuxBeginnings/Hyprland-Dots` upstre
 (successor of the archived `JaKooLit/Hyprland-Dots`).
 
 **Original migration (JaKooLit → LinuxBeginnings):** 2026-05-05, base v2.3.23
-**Last upgrade:** 2026-11-04, v2.3.28.1 (`2fe484de`).
-**Latest repository sync:** normal merge of one upstream commit into the customized `main`;
-existing fork history is preserved, with no force push.
+**Last upgrade:** 2026-11-10, v2.3.28.3 (`170b69b8`), which includes v2.3.28.2 (`21128439`).
+**Latest repository sync:** normal merge of two upstream commits into the customized `main`;
+the only conflict was additive `CHANGELOG.md` notes (fork block kept above upstream's).
+Existing fork history is preserved, with no force push.
 **Live deployment:** 2026-11-04 from `6cf81d6e`, using an 8-candidate staged
 manifest with three-way live preservation rather than `copy.sh`. Four paths actually
 changed (`lua/env.lua`, the new keybind-helper test, and the old/new version markers);
@@ -23,10 +24,9 @@ hypridle, Sunshine, polkit and Waybar retained their prior PIDs and unit states.
 Exactly one LuaConfigWatch and one inotify child were restored; no MonitorWatcher
 started. Waybar was not reloaded because none of its files changed. A cropped
 rendered top-bar image and compositor layer state confirmed the active desktop.
-**Repository offline verification (2026-11-04):** `tools/verify-lua.sh` passes with
+**Repository offline verification (2026-11-10):** `tools/verify-lua.sh` passes with
 206 binds and no reported collisions, missing exec targets or bad options. All 20
-config test scripts pass 696 checks, including the new upstream keybind-helper patch
-suite.
+config test scripts pass 696 checks.
 **Staged-live offline verification (2026-11-04):** `tools/verify-lua.sh` passes.
 The staged `run-all.sh` sweep passes 579 checks with zero failures; its
 installer-dependent one-check entries are skips, not full suite coverage. The actual
@@ -43,10 +43,15 @@ new display-layout binds. Display-profile tools are installed but opt-in; select
 a profile can rewrite `UserConfigs/monitors.lua`. GPU/software-rendering env defaults
 stay commented. Upstream's in-process window actions, keybind index, event-driven
 Waybar modules and `LuaConfigWatch.sh` are active. A saved Lua override triggered
-one reload through the new watcher without errors.
-Repository rollback for the 2026-11-04 sync: local branches
-`backup-main-20261104-114849` and `backup-origin-main-20261104-114849`, plus
-`/tmp/hyprland-upgrade-20261104/hyprland-dots-pre-20261104-114849.bundle`.
+one reload through the new watcher without errors. v2.3.28.2 replaces the deprecated
+`dwindle.special_scale_factor` with a system `special:special` workspace rule
+(`gaps_in = 8`, `gaps_out = 80`) and sets `quirks.skip_non_kms_dmabuf_formats = false`;
+the fork has no special-workspace override, so both upstream defaults apply.
+Repository rollback for the 2026-11-10 sync: local branches
+`backup-main-20261110-111418` and `backup-origin-main-20261110-111418`, plus
+`~/dots-rollback/update-20261110-111418/hyprland-dots-pre-20261110-111418.bundle`.
+2026-11-04 sync: branches `backup-main-20261104-114849` and
+`backup-origin-main-20261104-114849` (its `/tmp` bundle no longer exists).
 Deployment rollback: `~/dots-rollback/update-20261104-121125/` (mode 0700) contains
 the mode-0600 full pre-apply `live-hypr-before.tar.gz`, manifest/source refs,
 before/after runtime evidence, watcher PID records and protected inventories.
