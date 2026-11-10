@@ -11,27 +11,28 @@ commits on top of the actively maintained `LinuxBeginnings/Hyprland-Dots` upstre
 **Latest repository sync:** normal merge of two upstream commits into the customized `main`;
 the only conflict was additive `CHANGELOG.md` notes (fork block kept above upstream's).
 Existing fork history is preserved, with no force push.
-**Live deployment:** 2026-11-04 from `6cf81d6e`, using an 8-candidate staged
-manifest with three-way live preservation rather than `copy.sh`. Four paths actually
-changed (`lua/env.lua`, the new keybind-helper test, and the old/new version markers);
-all four Waybar candidates were byte/mode-identical no-ops. The protected-path
-inventory changed at only those four paths. T3 capture, 24-hour clocks, generated
-colors, wallpaper, kitty settings and Waybar selection symlinks were preserved.
-**Runtime verification:** `hyprctl reload` succeeded; Hyprland PID 4204 was unchanged
-and `hyprctl configerrors` was empty. eDP-1 remains 2560×1600@240, scale 1.6, DPMS on;
-Moonlight remains disabled and `stream-route-check.sh direct` passes. Exactly one
-hypridle, Sunshine, polkit and Waybar retained their prior PIDs and unit states.
-Exactly one LuaConfigWatch and one inotify child were restored; no MonitorWatcher
-started. Waybar was not reloaded because none of its files changed. A cropped
-rendered top-bar image and compositor layer state confirmed the active desktop.
+**Live deployment:** 2026-11-10 from `1aa8b353`, using a 7-path staged manifest
+(three-way base `6cf81d6e`) rather than `copy.sh`. Every live path still equalled the
+base, so all seven were clean upstream copies: `hl.meta.lua`, `lua/env.lua`,
+`lua/settings.lua`, `lua/workspaces.lua`, `scripts/Tak0-Per-Window-Switch.sh` and the
+old/new version markers. No UserConfigs, UserScripts or Waybar file was touched.
+**Runtime verification:** `hyprctl reload` succeeded; Hyprland PID 4901 was unchanged,
+`hyprctl configerrors` was empty and `hyprctl deprecated-config` changed from flagging
+`dwindle.special_scale_factor` to `all good!`. `hyprctl workspacerules` shows the
+`special:special` rule (gaps 8/80) and `getoption` reports
+`quirks:skip_non_kms_dmabuf_formats` false. eDP-1 remains 2560×1600@240, scale 1.6,
+DPMS on; Moonlight remains disabled and `stream-route-check.sh direct` passes.
+hypridle, Sunshine, polkit, Waybar and `lid-panel.sh` kept their PIDs and unit states;
+Waybar selection symlinks are unchanged. Exactly one LuaConfigWatch and one inotify
+child were restored; no MonitorWatcher started. The running per-window layout listener
+(old script, no lock) was replaced by one listener on the new script that holds
+`$XDG_RUNTIME_DIR/kb_layout_per_window.lock`; a second `--listener` exits at once.
+A cropped rendered top-bar image and compositor layer state confirmed the active desktop.
 **Repository offline verification (2026-11-10):** `tools/verify-lua.sh` passes with
 206 binds and no reported collisions, missing exec targets or bad options. All 20
 config test scripts pass 696 checks.
-**Staged-live offline verification (2026-11-04):** `tools/verify-lua.sh` passes.
-The staged `run-all.sh` sweep passes 579 checks with zero failures; its
-installer-dependent one-check entries are skips, not full suite coverage. The actual
-isolated keybind-helper suite separately passes all 16 assertions with `patches/lib.sh`
-and patch 90 present.
+**Staged-live offline verification (2026-11-10):** `tools/verify-lua.sh` passes on the
+staged tree, and `bash -n` passes on the updated `Tak0-Per-Window-Switch.sh`.
 **Previous offline verification (2026-10-26):** repository and staged-live
 `tools/verify-lua.sh` passed; the adapted upstream suite passed 680 checks. Two patch
 tests used pinned upstream lid-block fixtures, plus three checks that patches 83/84
@@ -52,17 +53,19 @@ Repository rollback for the 2026-11-10 sync: local branches
 `~/dots-rollback/update-20261110-111418/hyprland-dots-pre-20261110-111418.bundle`.
 2026-11-04 sync: branches `backup-main-20261104-114849` and
 `backup-origin-main-20261104-114849` (its `/tmp` bundle no longer exists).
-Deployment rollback: `~/dots-rollback/update-20261104-121125/` (mode 0700) contains
-the mode-0600 full pre-apply `live-hypr-before.tar.gz`, manifest/source refs,
-before/after runtime evidence, watcher PID records and protected inventories.
+Deployment rollback: `~/dots-rollback/update-20261110-111418/` (mode 0700) contains
+the mode-0600 full pre-apply `live-hypr-before.tar.gz`, manifest, stage/apply tools,
+before/after runtime evidence and watcher/listener PID records.
+2026-11-04 deployment rollback: `~/dots-rollback/update-20261104-121125/`.
 Previous deployment rollback: local branches `backup-main-20261026-100111` and
 `backup-origin-main-20261026-100111`, plus `live-hypr-before.tar.gz`, deployment
 manifest, verified staging and logs in `~/dots-rollback/update-20261026-100111/`.
-This dotfiles upgrade changed no packages and did not restart the compositor; the
-pre-existing 0.57.0-running/0.57.1-installed drift remains. Lid-closed login,
-reboot, suspend/resume, physical lock/unlock, interactive menus/binds and a live
-Sunshine transition were not retested.
-Previous upgrades: 2026-10-26, v2.3.28 plus `b7834c15`; 2026-10-11, v2.3.27.7 plus
+The same day's `yay -Syu` reports nothing to do. The compositor was not restarted, so
+Hyprland runs 0.57.1 with 0.57.2 installed, and kernel 7.3.1 runs with 7.3.3
+installed; both need a re-login/reboot. Lid-closed login, reboot, suspend/resume,
+physical lock/unlock, interactive menus/binds and a live Sunshine transition were not
+retested.
+Previous upgrades: 2026-11-04, v2.3.28.1 (`2fe484de`); 2026-10-26, v2.3.28 plus `b7834c15`; 2026-10-11, v2.3.27.7 plus
 `c8c598d2`; 2026-09-15, v2.3.26.5 (`5cf37fb4`, last `.conf` base); 2026-08-08,
 post-v2.3.25.
 **Tracked branch:** `upstream/main` (stable). Do NOT base on `upstream/development`.
