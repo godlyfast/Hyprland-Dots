@@ -92,6 +92,30 @@ hyprctl clients -j | jq '.[] | {class: .class, title: .title, workspace: .worksp
   "class<brave-browser>": "<span foreground='#ff5722'>🦁</span> "
   ```
 
+### EasyCLIProxyAPI's monochrome icon
+
+The `class<EasyCLIProxyAPI>` rule uses the bundled `EasyCLIProxyAPI-Icon.ttf`
+at 115% of the workspace label size. The outline inherits the workspace text
+color. See `config/hypr/waybar/EasyCLIProxyAPI-Icon.LICENSE` for upstream artwork
+provenance.
+
+After deploying the Waybar files on a new machine, register the font once:
+
+```bash
+waybar_dir="${XDG_CONFIG_HOME:-$HOME/.config}/hypr/waybar"
+font_dir="${XDG_DATA_HOME:-$HOME/.local/share}/fonts"
+test -f "$waybar_dir/EasyCLIProxyAPI-Icon.ttf" &&
+  mkdir -p "$font_dir" &&
+  ln -sT "$waybar_dir/EasyCLIProxyAPI-Icon.ttf" "$font_dir/EasyCLIProxyAPI-Icon.ttf" &&
+  fc-cache "$font_dir"
+```
+
+Restart Waybar from the Hyprland session to pick up the new font:
+
+```bash
+hyprctl dispatch 'hl.dsp.exec_cmd("~/.config/hypr/scripts/WaybarStartup.sh --restart")'
+```
+
 ---
 
 ## 4. Step-by-Step: Adding a New Icon Mapping
