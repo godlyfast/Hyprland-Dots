@@ -11,7 +11,8 @@
 - Obsidian Edge panels use opaque square corners to stop intermittent repainting
   of their transparent rounded edges. Application-window decorations are unchanged.
   - Workspace task groups avoid double-padding their nested task buttons.
-- Waybar uses a teal knot glyph based on the EasyCLIProxyAPI app icon instead of the unknown-window fallback.
+- Waybar shows EasyCLIProxyAPI's diamond-and-knot mark in the workspace color.
+  - Register the bundled `EasyCLIProxyAPI-Icon.ttf` in the user font directory.
 
 ## v2.3.28.3
 

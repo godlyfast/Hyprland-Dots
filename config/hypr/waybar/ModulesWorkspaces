@@ -185,7 +185,7 @@
 		"class<roon\\.exe|Roon>": "󰎆 ",
 		"class<viber|com.viber.Viber>": "󰍩 ",
 		"title<.*Claude Code.*>": "󰚩 ",
-		"class<EasyCLIProxyAPI>": "<span foreground='#86d3c9'></span> ",
+		"class<EasyCLIProxyAPI>": "<span font_family='EasyCLIProxyAPI Icon' weight='normal'></span> ",
 		"class<teams-for-linux>": "󰊻 ",
 		"title<.*TIDAL.*>": "🌊 ",
 		"class<tidal-hifi>": "🌊 ",
