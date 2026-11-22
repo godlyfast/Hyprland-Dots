@@ -11,6 +11,7 @@
 - Obsidian Edge panels use opaque square corners to stop intermittent repainting
   of their transparent rounded edges. Application-window decorations are unchanged.
   - Workspace task groups avoid double-padding their nested task buttons.
+- Waybar shows an API glyph for EasyCLIProxyAPI instead of the unknown-window fallback.
 
 ## v2.3.28.3
 
